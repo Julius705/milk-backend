@@ -1,0 +1,394 @@
+[
+  {
+    "id": "F001",
+    "name": "Mugo Muthoni Jacqueline",
+    "phone": "+254723537608",
+    "region": "kigumo",
+    "createdAt": "2025-09-16T10:33:48.760Z",
+    "isActive": true
+  },
+  {
+    "id": "F002",
+    "name": "Otema Nyaboke Khadija",
+    "phone": "+254712928665",
+    "region": "kangari",
+    "createdAt": "2025-09-16T10:33:48.761Z",
+    "isActive": true
+  },
+  {
+    "id": "F003",
+    "name": "Kimemia Nyambura Virginiah",
+    "phone": "+254716027530",
+    "region": "mukurweini",
+    "createdAt": "2025-09-16T10:33:48.761Z",
+    "isActive": true
+  },
+  {
+    "id": "F004",
+    "name": "Kuria Wairimu Vivian",
+    "phone": "+254723621025",
+    "region": "kagaa",
+    "createdAt": "2025-09-16T10:33:48.761Z",
+    "isActive": true
+  },
+  {
+    "id": "F005",
+    "name": "Nganga Wanjiku Janeffer",
+    "phone": "+254720699424",
+    "region": "karega",
+    "createdAt": "2025-09-16T10:33:48.761Z",
+    "isActive": true
+  },
+  {
+    "id": "F006",
+    "name": "Mwangi Muthoni Grace",
+    "phone": "+254724116265",
+    "region": "kahuhia",
+    "createdAt": "2025-09-16T10:33:48.761Z",
+    "isActive": true
+  },
+  {
+    "id": "F007",
+    "name": "Ngendo Njeri Bridget",
+    "phone": "+254723916220",
+    "region": "mukurweini",
+    "createdAt": "2025-09-16T10:33:48.761Z",
+    "isActive": true
+  },
+  {
+    "id": "F008",
+    "name": "Ndungu Wanjiru Catherine",
+    "phone": "+254726409226",
+    "region": "karega",
+    "createdAt": "2025-09-16T10:33:48.761Z",
+    "isActive": true
+  },
+  {
+    "id": "F009",
+    "name": "Kamore Nduta Sharon",
+    "phone": "+254705462997",
+    "region": "mukurweini",
+    "createdAt": "2025-09-16T10:33:48.761Z",
+    "isActive": true
+  },
+  {
+    "id": "F010",
+    "name": "Guchu Wakagira Yvonne",
+    "phone": "+254727324726",
+    "region": "karega",
+    "createdAt": "2025-09-16T10:33:48.761Z",
+    "isActive": true
+  },
+  {
+    "id": "F011",
+    "name": "Njeri Muirigo Racheal",
+    "phone": "+254796325518",
+    "region": "mukurweini",
+    "createdAt": "2025-09-16T10:33:48.761Z",
+    "isActive": true
+  },
+  {
+    "id": "F012",
+    "name": "Kariuki Muthoni Maryann",
+    "phone": "+254700284881",
+    "region": "mukurweini",
+    "createdAt": "2025-09-16T10:33:48.762Z",
+    "isActive": true
+  },
+  {
+    "id": "F013",
+    "name": "Muiruri Muthoni Gloria",
+    "phone": "+254713909286",
+    "region": "karega",
+    "createdAt": "2025-09-16T10:33:48.762Z",
+    "isActive": true
+  },
+  {
+    "id": "F014",
+    "name": "Muchiri Muthoni Mercy",
+    "phone": "+254703810280",
+    "region": "kigumo",
+    "createdAt": "2025-09-16T10:33:48.762Z",
+    "isActive": true
+  },
+  {
+    "id": "F015",
+    "name": "Mwangi Muthoni Gladwel",
+    "phone": "+254748348368",
+    "region": "mukurweini",
+    "createdAt": "2025-09-16T10:33:48.762Z",
+    "isActive": true
+  },
+  {
+    "id": "F016",
+    "name": "Kiarie Wanjiku Ann",
+    "phone": "+254723483897",
+    "region": "kigumo",
+    "createdAt": "2025-09-16T10:33:48.762Z",
+    "isActive": true
+  },
+  {
+    "id": "F017",
+    "name": "Kimani Wanja Anastacia",
+    "phone": "+254720623019",
+    "region": "mukurweini",
+    "createdAt": "2025-09-16T10:33:48.762Z",
+    "isActive": true
+  },
+  {
+    "id": "F018",
+    "name": "Macharia Wambui Esther",
+    "phone": "+254710512908",
+    "region": "kigumo",
+    "createdAt": "2025-09-16T10:33:48.762Z",
+    "isActive": true
+  },
+  {
+    "id": "F019",
+    "name": "Gichuki Wanjiru Christine",
+    "phone": "+254725789903",
+    "region": "mukurweini",
+    "createdAt": "2025-09-16T10:33:48.762Z",
+    "isActive": true
+  },
+  {
+    "id": "F020",
+    "name": "Kimani Wambui Linet",
+    "phone": "+254707526296",
+    "region": "karega",
+    "createdAt": "2025-09-16T10:33:48.762Z",
+    "isActive": true
+  },
+  {
+    "id": "F021",
+    "name": "Kinyaga Makungu Melvine",
+    "phone": "+254723481228",
+    "region": "kigumo",
+    "createdAt": "2025-09-16T10:33:48.762Z",
+    "isActive": true
+  },
+  {
+    "id": "F022",
+    "name": "Macharia Wangari Shantel",
+    "phone": "+254710280278",
+    "region": "karega",
+    "createdAt": "2025-09-16T10:33:48.762Z",
+    "isActive": true
+  },
+  {
+    "id": "F023",
+    "name": "Wangui Wambui Precious",
+    "phone": "+254799409941",
+    "region": "kigumo",
+    "createdAt": "2025-09-16T10:33:48.762Z",
+    "isActive": true
+  },
+  {
+    "id": "F024",
+    "name": "Wangui Elizabeth",
+    "phone": "+254714314632",
+    "region": "mukurweini",
+    "createdAt": "2025-09-16T10:33:48.762Z",
+    "isActive": true
+  },
+  {
+    "id": "F025",
+    "name": "Wanja Sarah",
+    "phone": "+254723908002",
+    "region": "kigumo",
+    "createdAt": "2025-09-16T10:33:48.762Z",
+    "isActive": true
+  },
+  {
+    "id": "F026",
+    "name": "Wangari Sharon",
+    "phone": "+254757202767",
+    "region": "kigumo",
+    "createdAt": "2025-09-16T10:33:48.762Z",
+    "isActive": true
+  },
+  {
+    "id": "F027",
+    "name": "Akinyi Rachael",
+    "phone": "+254723274511",
+    "region": "mukurweini",
+    "createdAt": "2025-09-16T10:33:48.762Z",
+    "isActive": true
+  },
+  {
+    "id": "F028",
+    "name": "Kalekye Joy",
+    "phone": "+254729172193",
+    "region": "kigumo",
+    "createdAt": "2025-09-16T10:33:48.763Z",
+    "isActive": true
+  },
+  {
+    "id": "F029",
+    "name": "Mbau Wambui Leency",
+    "phone": "+254727813244",
+    "region": "kigumo",
+    "createdAt": "2025-09-16T10:33:48.763Z",
+    "isActive": true
+  },
+  {
+    "id": "F030",
+    "name": "Nguya Waruguru Lucy",
+    "phone": "+254746328041",
+    "region": "mukurweini",
+    "createdAt": "2025-09-16T10:33:48.763Z",
+    "isActive": true
+  },
+  {
+    "id": "F031",
+    "name": "Odhiambo Akinyi Beatrice",
+    "phone": "+254791254063",
+    "region": "kigumo",
+    "createdAt": "2025-09-16T10:33:48.763Z",
+    "isActive": true
+  },
+  {
+    "id": "F032",
+    "name": "Karanja Wambui Purity",
+    "phone": "+254720783077",
+    "region": "kigumo",
+    "createdAt": "2025-09-16T10:33:48.763Z",
+    "isActive": true
+  },
+  {
+    "id": "F033",
+    "name": "Muthoni Alice",
+    "phone": "+254724470889",
+    "region": "mukurweini",
+    "createdAt": "2025-09-16T10:33:48.763Z",
+    "isActive": true
+  },
+  {
+    "id": "F034",
+    "name": "Nyambura Sharon",
+    "phone": "+254706127063",
+    "region": "kigumo",
+    "createdAt": "2025-09-16T10:33:48.763Z",
+    "isActive": true
+  },
+  {
+    "id": "F035",
+    "name": "Wanjiru Angel Teresia",
+    "phone": "+254786552276",
+    "region": "mukurweini",
+    "createdAt": "2025-09-16T10:33:48.763Z",
+    "isActive": true
+  },
+  {
+    "id": "F036",
+    "name": "Wangari Maurine",
+    "phone": "+254728110504",
+    "region": "karega",
+    "createdAt": "2025-09-16T10:33:48.763Z",
+    "isActive": true
+  },
+  {
+    "id": "F037",
+    "name": "Githinji Nyambura Vivian",
+    "phone": "+254701979503",
+    "region": "kigumo",
+    "createdAt": "2025-09-16T10:33:48.763Z",
+    "isActive": true
+  },
+  {
+    "id": "F038",
+    "name": "Wanjiku Njeri Grace",
+    "phone": "+254702029609",
+    "region": "mukurweini",
+    "createdAt": "2025-09-16T10:33:48.763Z",
+    "isActive": true
+  },
+  {
+    "id": "F039",
+    "name": "Wambui Wamuyu Joy",
+    "phone": "+254726651784",
+    "region": "karega",
+    "createdAt": "2025-09-16T10:33:48.763Z",
+    "isActive": true
+  },
+  {
+    "id": "F040",
+    "name": "Mueni Yvonne",
+    "phone": "+254712759708",
+    "region": "kigumo",
+    "createdAt": "2025-09-16T10:33:48.763Z",
+    "isActive": true
+  },
+  {
+    "id": "F041",
+    "name": "Njuguna Wairimu Pauline",
+    "phone": "+254723230532",
+    "region": "kigumo",
+    "createdAt": "2025-09-16T10:33:48.763Z",
+    "isActive": true
+  },
+  {
+    "id": "F042",
+    "name": "Wayua Elizabeth",
+    "phone": "+254728837586",
+    "region": "mukurweini",
+    "createdAt": "2025-09-16T10:33:48.763Z",
+    "isActive": true
+  },
+  {
+    "id": "F043",
+    "name": "Nekesa Treza",
+    "phone": "+254700475780",
+    "region": "kigumo",
+    "createdAt": "2025-09-16T10:33:48.763Z",
+    "isActive": true
+  },
+  {
+    "id": "F044",
+    "name": "Wambui Agnes",
+    "phone": "+254729531773",
+    "region": "karega",
+    "createdAt": "2025-09-16T10:33:48.763Z",
+    "isActive": true
+  },
+  {
+    "id": "F045",
+    "name": "Mwende Mumbe Tinah",
+    "phone": "+254713643884",
+    "region": "kigumo",
+    "createdAt": "2025-09-16T10:33:48.763Z",
+    "isActive": true
+  },
+  {
+    "id": "F046",
+    "name": "Wanjiru Esther Lorna",
+    "phone": "+254769157437",
+    "region": "kigumo",
+    "createdAt": "2025-09-16T10:33:48.763Z",
+    "isActive": true
+  },
+  {
+    "id": "F047",
+    "name": "Adhiambo Natalia",
+    "phone": "+254113711680",
+    "region": "kigumo",
+    "createdAt": "2025-09-16T10:33:48.763Z",
+    "isActive": true
+  },
+  {
+    "id": "F048",
+    "name": "Margaret Wairimu Njoroge",
+    "phone": "+254710616735",
+    "region": "mukurweini",
+    "createdAt": "2025-09-16T10:33:48.763Z",
+    "isActive": true
+  },
+  {
+    "id": "F049",
+    "name": "muturi muiru",
+    "phone": "0723654657",
+    "region": "mathioya",
+    "createdAt": "2025-09-27T05:12:52.481Z",
+    "isActive": true
+  }
+]
