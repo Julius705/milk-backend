@@ -17,24 +17,33 @@ const path = require("path");
 const milkFile = path.join(__dirname, "../data/milk.json");
 
 // ➕ Add milk record (Admin + Staff)
-router.post("/",requireAuth , requireRoles(["admin", "staff"]), async (req, res) => {
+router.post("/", requireAuth, requireRoles(["admin", "staff"]), async (req, res) => {
   const { farmerId, date, session, litres } = req.body;
 
   if (!farmerId || !date || !session || !litres) {
     return res.status(400).json({ error: "Missing farmerId, date, session, or litres" });
   }
 
+  const loggedInUser = req.user;
+  if (!loggedInUser || !loggedInUser.businessId) {
+    return res.status(403).json({ error: "Unauthorized: No business assigned" });
+  }
+
   const milk = await read("milk");
   const farmers = await read("farmers");
 
-  const farmer = farmers.find(f => f.id === farmerId);
+  const farmer = farmers.find(f => f.id === farmerId && f.businessId === loggedInUser.businessId);
   if (!farmer) {
-    return res.status(404).json({ error: "Farmer not found" });
+    return res.status(404).json({ error: "Farmer not found or unauthorized" });
   }
 
-  // ✅ Prevent duplicates (same farmer + date + session)
+  // ✅ Prevent duplicates within same business
   const duplicate = milk.find(
-    r => r.farmerId === farmerId && r.date === date && r.session === session
+    r =>
+      r.farmerId === farmerId &&
+      r.date === date &&
+      r.session === session &&
+      r.businessId === loggedInUser.businessId
   );
   if (duplicate) {
     return res.status(400).json({ error: "Record already exists for this session today" });
@@ -47,8 +56,9 @@ router.post("/",requireAuth , requireRoles(["admin", "staff"]), async (req, res)
     session,
     region: farmer.region || "Unassigned",
     date,
-    createdBy: req.user.id,   // ✅ track which staff/admin added it
-    createdAt: new Date()
+    createdBy: loggedInUser.id,
+    createdAt: new Date(),
+    businessId: loggedInUser.businessId // 🔐 scoped
   };
 
   milk.push(newRecord);
@@ -57,21 +67,42 @@ router.post("/",requireAuth , requireRoles(["admin", "staff"]), async (req, res)
   res.json(newRecord);
 });
 // 📖 Get all milk records (Admin + Staff, with optional region filter)
-router.get("/", requireAuth, requireRoles(["admin", "staff"]), async (req, res) => {
-  const { region } = req.query;
+router.get("/", requireAuth,requireRoles(["admin", "staff"]), async (req, res) => {
+  const loggedInUser = req.user;
+  if (!loggedInUser || !loggedInUser.businessId) {
+    return res.status(403).json({ error: "Unauthorized: No business assigned" });
+  }
+
+  const { region, farmer, createdBy } = req.query;
   let milk = await read("milk");
   const farmers = await read("farmers");
 
+  // ✅ Filter by businessId
+  milk = milk.filter(m => m.businessId === loggedInUser.businessId);
+
+  // ✅ Optional farmer filter
+  if (farmer) {
+    milk = milk.filter(m => m.farmerId === farmer);
+  }
+
+  // ✅ Optional staff-created filter
+  if (createdBy) {
+    milk = milk.filter(m => m.createdBy === createdBy);
+  }
+
+  // ✅ Optional region filter
   if (region) {
     milk = milk.filter(m => (m.region || "").toLowerCase() === region.toLowerCase());
   }
 
-  // 🔹 Join farmer names
+  // Enrich with farmer name
   const enriched = milk.map(m => {
-    const farmer = farmers.find(f => f.id === m.farmerId);
+    const farmerObj = farmers.find(
+      f => f.id === m.farmerId && f.businessId === loggedInUser.businessId
+    );
     return {
       ...m,
-      farmerName: farmer ? farmer.name : "Unknown"
+      farmerName: farmerObj ? farmerObj.name : "Unknown"
     };
   });
 
@@ -79,18 +110,29 @@ router.get("/", requireAuth, requireRoles(["admin", "staff"]), async (req, res) 
 });
 // 👤 Farmer views their own milk records
 router.get("/my", requireAuth, requireRole("farmer"), async (req, res) => {
-  
+  const loggedInUser = req.user;
+  if (!loggedInUser || !loggedInUser.businessId || !loggedInUser.farmerId) {
+    return res.status(403).json({ error: "Unauthorized: Missing business or farmer identity" });
+  }
+
   const milk = await read("milk");
-  const myRecords = milk.filter(m => m.farmerId === req.user.farmerId);
+  const myRecords = milk.filter(
+    m => m.farmerId === loggedInUser.farmerId && m.businessId === loggedInUser.businessId
+  );
+
   res.json(myRecords);
 });
 
 // 📥 Download Milk Records Excel Template
-
-
-router.get("/template", async (req, res) => {
+router.get("/template", requireAuth, async (req, res) => {
   try {
+    const loggedInUser = req.user;
+    if (!loggedInUser || !loggedInUser.businessId) {
+      return res.status(403).json({ error: "Unauthorized: No business assigned" });
+    }
+
     console.log("📥 Milk template requested");
+
     const workbook = new ExcelJS.Workbook();
     const sheet = workbook.addWorksheet("Milk Records");
 
@@ -103,7 +145,10 @@ router.get("/template", async (req, res) => {
       { header: "date", key: "date", width: 15 }
     ];
 
-    // Add one sample row
+    // Add spacing row between header and content
+    sheet.addRow({});
+    
+    // Sample row
     sheet.addRow({
       farmerId: "F001",
       litres: 20,
@@ -112,7 +157,7 @@ router.get("/template", async (req, res) => {
       date: "2025-09-17"
     });
 
-    // Set response headers
+    // Response headers
     res.setHeader(
       "Content-Type",
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -122,7 +167,6 @@ router.get("/template", async (req, res) => {
       "attachment; filename=MilkRecordsTemplate.xlsx"
     );
 
-    // Write workbook to response
     await workbook.xlsx.write(res);
     res.end();
   } catch (err) {
@@ -131,29 +175,64 @@ router.get("/template", async (req, res) => {
   }
 });
 
+// ✅ Get single milk record (Admin or Staff)
+router.get("/:id", requireAuth, requireRoles(["admin", "staff"]), async (req, res) => {
+  const { id } = req.params;
+  const loggedInUser = req.user;
 
-
-// 📖 Get milk records for a specific farmer (Admin + Staff)
-router.get("/:farmerId", requireAuth, requireRoles(["admin", "staff"]), async (req, res) => {
-  const { farmerId } = req.params;
-  const milk = await read("milk");
-
-  const farmerRecords = milk.filter(
-    m => m.farmerId.trim().toUpperCase() === farmerId.trim().toUpperCase()
-  );
-
-  if (!farmerRecords.length) {
-    return res.status(404).json({ error: "Milk record not found" });
+  if (!loggedInUser || !loggedInUser.businessId) {
+    return res.status(403).json({ error: "Unauthorized: No business assigned" });
   }
 
-  res.json(farmerRecords);
+  const milk = await read("milk");
+  const record = milk.find(m => m.id === id && m.businessId === loggedInUser.businessId);
+
+  if (!record) {
+    return res.status(404).json({ error: "Milk record not found or unauthorized" });
+  }
+
+  res.json(record);
 });
+
+
+// 🧹 Bulk delete milk records (Admin only)
+router.post("/bulk-delete", requireAuth, requireRole("admin"), async (req, res) => {
+  const { ids } = req.body;
+
+  if (!Array.isArray(ids) || ids.length === 0) {
+    return res.status(400).json({ error: "No IDs provided" });
+  }
+
+  const loggedInUser = req.user;
+  if (!loggedInUser || !loggedInUser.businessId) {
+    return res.status(403).json({ error: "Unauthorized: No business assigned" });
+  }
+
+  let milk = await read("milk");
+
+  // Filter out records to keep
+  const beforeCount = milk.length;
+  milk = milk.filter(m => !(ids.includes(m.id) && m.businessId === loggedInUser.businessId));
+  const afterCount = milk.length;
+
+  const deletedCount = beforeCount - afterCount;
+
+  await write("milk", milk);
+
+  res.json({ ok: true, deleted: deletedCount });
+});
+
 // 📤 Export Milk Records to Excel (with Farmer Name)
 router.get("/export", requireAuth, async (req, res) => {
-  console.log("📤 /api/milk/export route HIT");   // ✅ Route reached
+  console.log("📤 /api/milk/export route HIT");
 
   try {
-    // 1. Load existing records
+    const loggedInUser = req.user;
+    if (!loggedInUser || !loggedInUser.businessId) {
+      return res.status(403).json({ error: "Unauthorized: No business assigned" });
+    }
+
+    // 1. Load records
     console.log("📖 Reading milk records...");
     const milkRecords = await read("milk");
     console.log("✅ Milk records loaded:", milkRecords.length);
@@ -162,24 +241,31 @@ router.get("/export", requireAuth, async (req, res) => {
     const farmers = await read("farmers");
     console.log("✅ Farmers loaded:", farmers.length);
 
-    if (!milkRecords || milkRecords.length === 0) {
+    // 2. Filter by businessId
+    const scopedMilk = milkRecords.filter(m => m.businessId === loggedInUser.businessId);
+    const scopedFarmers = farmers.filter(f => f.businessId === loggedInUser.businessId);
+
+    if (!scopedMilk || scopedMilk.length === 0) {
       console.log("⚠ No milk records to export");
       return res.status(400).json({ error: "No milk records to export" });
     }
 
-    // 2. Create workbook + worksheet
+    // 3. Create workbook
     console.log("📒 Creating Excel workbook...");
     const workbook = new ExcelJS.Workbook();
     const sheet = workbook.addWorksheet("Milk Records");
 
-    // 3. Add headers
+    // 4. Add headers
     console.log("📝 Adding headers...");
     sheet.addRow(["Farmer ID", "Farmer Name", "Litres", "Session", "Region", "Date"]);
 
-    // 4. Add data with farmer names
+    // 5. Add spacing row
+    sheet.addRow({});
+
+    // 6. Populate rows
     console.log("📝 Populating rows...");
-    milkRecords.forEach((record, i) => {
-      const farmer = farmers.find(f => f.id === record.farmerId);
+    scopedMilk.forEach((record, i) => {
+      const farmer = scopedFarmers.find(f => f.id === record.farmerId);
       const farmerName = farmer ? farmer.name : "Unknown";
 
       sheet.addRow([
@@ -196,7 +282,7 @@ router.get("/export", requireAuth, async (req, res) => {
       }
     });
 
-    // 5. Set response headers for file download
+    // 7. Set response headers
     console.log("📤 Setting response headers...");
     res.setHeader(
       "Content-Disposition",
@@ -207,11 +293,11 @@ router.get("/export", requireAuth, async (req, res) => {
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     );
 
-    // 6. Write workbook to response
+    // 8. Write workbook
     console.log("💾 Writing workbook to response...");
     await workbook.xlsx.write(res);
 
-    console.log("✅ Export successful:", milkRecords.length, "records");
+    console.log("✅ Export successful:", scopedMilk.length, "records");
     res.end();
   } catch (err) {
     console.error("❌ Error exporting milk records:", err.message);
@@ -219,17 +305,21 @@ router.get("/export", requireAuth, async (req, res) => {
     res.status(500).json({ error: "Failed to export records" });
   }
 });
-
 // ✏ Edit milk record (Admin only)
 router.put("/:id", requireAuth, requireRole("admin"), async (req, res) => {
   const { id } = req.params;
   const { litres, date } = req.body;
 
+  const loggedInUser = req.user;
+  if (!loggedInUser || !loggedInUser.businessId) {
+    return res.status(403).json({ error: "Unauthorized: No business assigned" });
+  }
+
   const milk = await read("milk");
-  const record = milk.find(m => m.id === id);
+  const record = milk.find(m => m.id === id && m.businessId === loggedInUser.businessId);
 
   if (!record) {
-    return res.status(404).json({ error: "Milk record not found" });
+    return res.status(404).json({ error: "Milk record not found or unauthorized" });
   }
 
   if (litres !== undefined) record.litres = litres;
@@ -238,15 +328,22 @@ router.put("/:id", requireAuth, requireRole("admin"), async (req, res) => {
   await write("milk", milk);
   res.json({ ok: true, record });
 });
-
 // ❌ Delete milk record (Admin only)
 router.delete("/:id", requireAuth, requireRole("admin"), async (req, res) => {
   const { id } = req.params;
-  let milk = await read("milk");
 
-  const recordIndex = milk.findIndex(m => m.id === id);
+  const loggedInUser = req.user;
+  if (!loggedInUser || !loggedInUser.businessId) {
+    return res.status(403).json({ error: "Unauthorized: No business assigned" });
+  }
+
+  let milk = await read("milk");
+  const recordIndex = milk.findIndex(
+    m => m.id === id && m.businessId === loggedInUser.businessId
+  );
+
   if (recordIndex === -1) {
-    return res.status(404).json({ error: "Milk record not found" });
+    return res.status(404).json({ error: "Milk record not found or unauthorized" });
   }
 
   const deleted = milk.splice(recordIndex, 1);
@@ -258,8 +355,13 @@ router.delete("/:id", requireAuth, requireRole("admin"), async (req, res) => {
 const upload = multer({ storage: multer.memoryStorage() });
 
 // 📤 Import Milk Records from Excel
-router.post("/import", upload.single("file"), async (req, res) => {
+router.post("/import", requireAuth, upload.single("file"), async (req, res) => {
   try {
+    const loggedInUser = req.user;
+    if (!loggedInUser || !loggedInUser.businessId) {
+      return res.status(403).json({ error: "Unauthorized: No business assigned" });
+    }
+
     console.log("📥 Import request received");
 
     if (!req.file) {
@@ -279,15 +381,26 @@ router.post("/import", upload.single("file"), async (req, res) => {
       return res.status(400).json({ error: "Sheet 'Milk Records' not found" });
     }
 
+    const farmers = await read("farmers");
+    const scopedFarmers = farmers.filter(f => f.businessId === loggedInUser.businessId);
+
     const imported = [];
 
     sheet.eachRow((row, rowNumber) => {
-      if (rowNumber === 1) return; // skip header row
+      if (rowNumber === 1) return; // skip header
 
       const [farmerId, litres, session, region, date] = row.values.slice(1);
 
       if (!farmerId || !litres || !session || !region || !date) {
         console.log(`⚠ Skipping row ${rowNumber} - missing fields`);
+        return;
+      }
+
+      const farmer = scopedFarmers.find(
+        f => f.id.trim().toUpperCase() === farmerId.trim().toUpperCase()
+      );
+      if (!farmer) {
+        console.log(`⚠ Skipping row ${rowNumber} - farmer not found or unauthorized`);
         return;
       }
 
@@ -299,12 +412,12 @@ router.post("/import", upload.single("file"), async (req, res) => {
         region,
         date,
         createdAt: new Date().toISOString(),
+        businessId: loggedInUser.businessId // 🔐 scoped
       });
     });
 
     console.log("✅ Parsed rows:", imported.length);
 
-    // Save records
     const existingRecords = await read("milk");
     const updatedRecords = [...existingRecords, ...imported];
     await write("milk", updatedRecords);

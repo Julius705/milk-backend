@@ -8,6 +8,11 @@ const filePath = path.join(__dirname, "../data", "users.json");
 
 // === GET all users ===
 router.get("/", (req, res) => {
+  const loggedInUser = req.user;
+  if (!loggedInUser || !loggedInUser.businessId) {
+    return res.status(403).json({ error: "Unauthorized: No business assigned" });
+  }
+
   fs.readFile(filePath, "utf-8", (err, data) => {
     if (err) {
       console.error("❌ Failed to read users file:", err);
@@ -22,16 +27,21 @@ router.get("/", (req, res) => {
       users = [];
     }
 
-    res.json(users);
+    const filtered = users.filter(u => u.businessId === loggedInUser.businessId);
+    res.json(filtered);
   });
 });
-
-// === POST add new user ===
+// Add users.
 router.post("/", (req, res) => {
   const { username, password, role } = req.body;
 
   if (!username || !password || !role) {
     return res.status(400).json({ error: "Missing required fields" });
+  }
+
+  const loggedInUser = req.user;
+  if (!loggedInUser || !loggedInUser.businessId) {
+    return res.status(403).json({ error: "Unauthorized: No business assigned" });
   }
 
   fs.readFile(filePath, "utf-8", (err, data) => {
@@ -50,8 +60,9 @@ router.post("/", (req, res) => {
     const newUser = {
       id: "U" + Date.now().toString(36) + Math.floor(Math.random() * 1000),
       username,
-      password, // ⚠ In production: hash this
+      password, // ⚠ hash this in production
       role,
+      businessId: loggedInUser.businessId, // 🔑 scope to business
       createdAt: new Date().toISOString()
     };
 
@@ -68,11 +79,14 @@ router.post("/", (req, res) => {
     });
   });
 });
-
-
 // === DELETE user by ID ===
 router.delete("/:id", (req, res) => {
   const userId = req.params.id;
+
+  const loggedInUser = req.user;
+  if (!loggedInUser || !loggedInUser.businessId) {
+    return res.status(403).json({ error: "Unauthorized: No business assigned" });
+  }
 
   fs.readFile(filePath, "utf-8", (err, data) => {
     if (err) return res.status(500).json({ error: "Failed to read users file" });
@@ -84,11 +98,12 @@ router.delete("/:id", (req, res) => {
       return res.status(500).json({ error: "Corrupted users file" });
     }
 
-    const updatedUsers = users.filter(u => u.id !== userId);
-
-    if (updatedUsers.length === users.length) {
-      return res.status(404).json({ error: "User not found" });
+    const targetUser = users.find(u => u.id === userId && u.businessId === loggedInUser.businessId);
+    if (!targetUser) {
+      return res.status(404).json({ error: "User not found or unauthorized" });
     }
+
+    const updatedUsers = users.filter(u => u.id !== userId);
 
     fs.writeFile(filePath, JSON.stringify(updatedUsers, null, 2), (err) => {
       if (err) return res.status(500).json({ error: "Failed to delete user" });
@@ -96,6 +111,4 @@ router.delete("/:id", (req, res) => {
     });
   });
 });
-
-
 module.exports = router;

@@ -4,37 +4,54 @@ const router = express.Router();
 const { read, write } = require("../utils/fs");
 const {requireAuth} = require("../middleware/auth");
 const { requireRole, requireRoles } = require("../middleware/roles");
-
+const { requireActiveSubscription } = require("../middleware/subscription");
 
 
 // 🟢 Only admin can add farmers
 router.post("/", requireAuth, requireRole("admin"), async (req, res) => {
+  const { name, phone, region } = req.body || {};
+  if (!name || !phone || !region) {
+    return res.status(400).json({ error: "name, phone, and region are required" });
+  }
+
+  const loggedInUser = req.user;
+  if (!loggedInUser || !loggedInUser.businessId) {
+    return res.status(403).json({ error: "Unauthorized: No business assigned" });
+  }
+
   const farmers = await read("farmers");
   const users = await read("users");
 
-  // Generate Farmer ID
-  const newFarmerId = "F" + (farmers.length + 1).toString().padStart(3, "0");
+  // Filter farmers belonging to this business
+const businessFarmers = farmers.filter(f => f.businessId === loggedInUser.businessId);
+
+// Generate next farmer number for this business
+const nextNumber = businessFarmers.length + 1;
+
+// Create scoped ID like F001, F002, etc.
+const newFarmerId = "F" + nextNumber.toString().padStart(3, "0");
 
   const newFarmer = {
     id: newFarmerId,
-    name: req.body.name,
-    phone: req.body.phone,
-    region: req.body.region || "Unassigned",
+    name,
+    phone,
+    region,
     createdAt: new Date(),
-    isActive: true
+    isActive: true,
+    businessId: loggedInUser.businessId // 🔐 scoped
   };
 
   farmers.push(newFarmer);
   await write("farmers", farmers);
 
-  // ✅ Auto-create farmer login user
-  const username = req.body.name.split(" ")[0].toLowerCase(); // first name only
+  const username = name.split(" ")[0].toLowerCase();
   const newUser = {
     id: "U" + Date.now().toString(36),
     username,
-    password: newFarmerId, // farmerId as password
+    password: newFarmerId,
     role: "farmer",
     farmerId: newFarmerId,
+    businessId: loggedInUser.businessId, // 🔐 scoped
     createdAt: new Date()
   };
 
@@ -46,31 +63,22 @@ router.post("/", requireAuth, requireRole("admin"), async (req, res) => {
     user: { username: newUser.username, password: newUser.password, role: newUser.role }
   });
 });
-
-// 🟢 Admin + staff can view farmers (with optional region filter)
-router.get("/", requireAuth, requireRoles(["admin", "staff"]), async (req, res) => {
-  const farmers = await read("farmers");
-  const { region } = req.query;
-
-  let filtered = farmers;
-  if (region) {
-    filtered = farmers.filter(f => f.region === region);
-  }
-
-  res.json(filtered);
-});
-
 // 🟢 Farmers can view only their own data
 router.get("/:id", requireAuth, requireRoles(["admin", "staff", "farmer"]), async (req, res) => {
+  const loggedInUser = req.user;
+  if (!loggedInUser || !loggedInUser.businessId) {
+    return res.status(403).json({ error: "Unauthorized: No business assigned" });
+  }
+
   const farmers = await read("farmers");
-  const farmer = farmers.find(f => f.id === req.params.id);
+  const farmer = farmers.find(f => f.id === req.params.id && f.businessId === loggedInUser.businessId);
 
   if (!farmer) {
-    return res.status(404).json({ error: "Farmer not found" });
+    return res.status(404).json({ error: "Farmer not found or unauthorized" });
   }
 
   // ✅ Farmers can only access their own data
-  if (req.user.role === "farmer" && req.user.farmerId !== farmer.id) {
+  if (loggedInUser.role === "farmer" && loggedInUser.farmerId !== farmer.id) {
     return res.status(403).json({ error: "Forbidden: cannot access other farmers" });
   }
 
@@ -85,18 +93,25 @@ router.post("/import", requireAuth, requireRole("admin"), async (req, res) => {
       return res.status(400).json({ error: "Invalid farmers payload" });
     }
 
+    const loggedInUser = req.user;
+    if (!loggedInUser || !loggedInUser.businessId) {
+      return res.status(403).json({ error: "Unauthorized: No business assigned" });
+    }
+
     const dbFarmers = await read("farmers");
     const dbUsers = await read("users");
 
     const createdAccounts = [];
 
     for (const f of farmers) {
-      // Generate farmer ID if missing
-      const newId = f.id || "F" + (dbFarmers.length + 1).toString().padStart(3, "0");
+      const businessFarmers = dbFarmers.filter(f => f.businessId === loggedInUser.businessId);
+      const nextNumber = businessFarmers.length + 1;
+      const newId = f.id || "F" + nextNumber.toString().padStart(3, "0");
 
-      // Check if farmer already exists
+      // Check for duplicates within the same business
       const exists = dbFarmers.find(
-        farmer => farmer.id === newId || farmer.phone === f.phone
+        farmer => (farmer.id === newId || farmer.phone === f.phone) &&
+                  farmer.businessId === loggedInUser.businessId
       );
 
       if (!exists) {
@@ -106,12 +121,12 @@ router.post("/import", requireAuth, requireRole("admin"), async (req, res) => {
           phone: f.phone || "-",
           region: f.region || "Unassigned",
           createdAt: new Date().toISOString(),
-          isActive: f.isActive !== false
+          isActive: f.isActive !== false,
+          businessId: loggedInUser.businessId // 🔐 scoped
         };
 
         dbFarmers.push(newFarmer);
 
-        // 🔑 Create login account
         const baseUsername = newFarmer.name.split(" ")[0].toLowerCase();
         let username = baseUsername;
         let counter = 1;
@@ -120,7 +135,7 @@ router.post("/import", requireAuth, requireRole("admin"), async (req, res) => {
           username = baseUsername + counter++;
         }
 
-        const password = newFarmer.id; // FarmerId = password
+        const password = newFarmer.id;
 
         const newUser = {
           id: "U" + Date.now().toString(36) + Math.floor(Math.random() * 1000),
@@ -128,6 +143,7 @@ router.post("/import", requireAuth, requireRole("admin"), async (req, res) => {
           password,
           role: "farmer",
           farmerId: newFarmer.id,
+          businessId: loggedInUser.businessId, // 🔐 scoped
           createdAt: new Date().toISOString()
         };
 
@@ -142,7 +158,6 @@ router.post("/import", requireAuth, requireRole("admin"), async (req, res) => {
       }
     }
 
-    // Save both farmers + users
     await write("farmers", dbFarmers);
     await write("users", dbUsers);
 

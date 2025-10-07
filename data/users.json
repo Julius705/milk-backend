@@ -1,423 +1,690 @@
 [
   {
-    "id": "Umfmetlw7",
-    "username": "admin",
-    "password": "$2b$10$ncG.o7TaJRIcfXx1coKV9eMaRxoyizHkAwvWl9R..845q3C.5nm.2",
+    "id": "U008",
+    "name": "linda wangui",
+    "username": "lindawanguiU008",
+    "phone": "0712266295",
     "role": "admin",
-    "trialEndsAt": "2025-10-16T10:28:17.047Z",
-    "isSubscribed": false,
-    "createdAt": "2025-09-16T10:28:17.047Z"
+    "password": "12345",
+    "createdBy": "developer",
+    "businessId": "B002",
+    "subscription": {
+      "plan": "trial",
+      "startDate": "2025-10-03T18:10:35.355Z",
+      "expiryDate": "2025-11-03T18:10:35.355Z",
+      "status": "active"
+    }
   },
   {
-    "id": "Umfmf0pug703",
+    "id": "U009",
+    "name": "precious wambui",
+    "username": "preciouswambuiU009",
+    "phone": "0712266295",
+    "role": "admin",
+    "password": "12345",
+    "createdBy": "developer",
+    "businessId": "B003",
+    "subscription": {
+      "plan": "trial",
+      "startDate": "2025-10-03T18:58:06.100Z",
+      "expiryDate": "2025-11-03T18:58:06.100Z",
+      "status": "active"
+    }
+  },
+  {
+    "id": "Umgb7lkbb",
+    "username": "duncun",
+    "password": "F050",
+    "role": "farmer",
+    "farmerId": "F050",
+    "createdAt": "2025-10-03T19:00:18.839Z"
+  },
+  {
+    "id": "U010",
+    "name": "mike nganga",
+    "username": "mikengangaU010",
+    "phone": "0712266295",
+    "role": "admin",
+    "password": "12345",
+    "createdBy": "developer",
+    "businessId": "B004",
+    "subscription": {
+      "plan": "trial",
+      "startDate": "2025-10-04T07:04:18.503Z",
+      "expiryDate": "2025-11-04T07:04:18.503Z",
+      "status": "active"
+    }
+  },
+  {
+    "id": "U011",
+    "name": "mukami njui",
+    "username": "mukaminjuiU011",
+    "phone": "0732456654",
+    "role": "admin",
+    "password": "12345",
+    "createdBy": "developer",
+    "businessId": "B005",
+    "subscription": {
+      "plan": "trial",
+      "startDate": "2025-10-04T10:14:43.912Z",
+      "expiryDate": "2025-11-04T10:14:43.912Z",
+      "status": "active"
+    }
+  },
+  {
+    "id": "U012",
+    "name": "esther",
+    "username": "estherU012",
+    "phone": "072343678",
+    "role": "admin",
+    "password": "12345",
+    "createdBy": "developer",
+    "businessId": "B006",
+    "subscription": {
+      "plan": "manual",
+      "startDate": "2025-10-04T11:28:22.730Z",
+      "expiryDate": "2025-12-04T11:28:22.730Z",
+      "status": "active"
+    }
+  },
+  {
+    "id": "U013",
+    "name": "mwihaki",
+    "username": "mwihakiU013",
+    "phone": "0723987654",
+    "role": "admin",
+    "password": "12345",
+    "createdBy": "developer",
+    "businessId": "B007",
+    "subscription": {
+      "plan": "manual",
+      "startDate": "2025-10-04T14:26:39.329Z",
+      "expiryDate": "2026-03-04T14:26:39.329Z",
+      "status": "active"
+    }
+  },
+  {
+    "id": "Umgcmqbsw",
+    "username": "maina",
+    "password": "F051",
+    "role": "farmer",
+    "farmerId": "F051",
+    "businessId": "B005",
+    "createdAt": "2025-10-04T18:51:41.504Z"
+  },
+  {
+    "id": "Umgcms1h7652",
+    "username": "wanjeri",
+    "password": "wanjeri12",
+    "role": "admin",
+    "businessId": "B005",
+    "createdAt": "2025-10-04T18:53:01.435Z"
+  },
+  {
+    "id": "Umgcmt45g865",
+    "username": "mungai",
+    "password": "mungai12",
+    "role": "staff",
+    "businessId": "B005",
+    "createdAt": "2025-10-04T18:53:51.556Z"
+  },
+  {
+    "id": "U015",
+    "name": "gatonye",
+    "username": "gatonyeU015",
+    "phone": "0723987654",
+    "role": "admin",
+    "password": "12345",
+    "createdBy": "developer",
+    "businessId": "B008",
+    "subscription": {
+      "plan": "trial",
+      "startDate": "2025-10-04T19:06:01.462Z",
+      "expiryDate": "2025-11-04T19:06:01.462Z",
+      "status": "active"
+    }
+  },
+  {
+    "id": "U016",
+    "name": "wanjiru",
+    "username": "wanjiruU016",
+    "phone": "0723987654",
+    "role": "admin",
+    "password": "12345",
+    "createdBy": "developer",
+    "businessId": "B009",
+    "subscription": {
+      "plan": "trial",
+      "startDate": "2025-10-04T19:08:21.969Z",
+      "expiryDate": "2025-11-04T19:08:21.969Z",
+      "status": "active"
+    }
+  },
+  {
+    "id": "Umgdnxiou101",
+    "username": "waceke",
+    "password": "waceke12",
+    "role": "admin",
+    "businessId": "B007",
+    "createdAt": "2025-10-05T12:13:02.814Z"
+  },
+  {
+    "id": "Umgdon1dp557",
+    "username": "wairimu",
+    "password": "wairimu12",
+    "role": "staff",
+    "businessId": "B007",
+    "createdAt": "2025-10-05T12:32:53.437Z"
+  },
+  {
+    "id": "Umgdoop0r",
+    "username": "kimingi",
+    "password": "F052",
+    "role": "farmer",
+    "farmerId": "F052",
+    "businessId": "B007",
+    "createdAt": "2025-10-05T12:34:10.731Z"
+  },
+  {
+    "id": "U011",
+    "name": "lucy",
+    "username": "lucyU011",
+    "phone": "0789067654",
+    "role": "admin",
+    "password": "12345",
+    "createdBy": "developer",
+    "businessId": "B009",
+    "subscription": {
+      "plan": "trial",
+      "startDate": "2025-10-05T14:12:52.160Z",
+      "expiryDate": "2025-11-05T14:12:52.160Z",
+      "status": "active"
+    }
+  },
+  {
+    "id": "Umgdscjj0102",
+    "username": "Josephine",
+    "password": "josephine12",
+    "role": "staff",
+    "businessId": "B009",
+    "createdAt": "2025-10-05T14:16:42.204Z"
+  },
+  {
+    "id": "Umge1gamo941",
     "username": "mugo",
-    "password": "F001",
-    "role": "farmer",
-    "farmerId": "F001",
-    "createdAt": "2025-09-16T10:33:48.761Z"
-  },
-  {
-    "id": "Umfmf0puh377",
-    "username": "otema",
-    "password": "F002",
-    "role": "farmer",
-    "farmerId": "F002",
-    "createdAt": "2025-09-16T10:33:48.761Z"
-  },
-  {
-    "id": "Umfmf0puh860",
-    "username": "kimemia",
     "password": "F003",
     "role": "farmer",
     "farmerId": "F003",
-    "createdAt": "2025-09-16T10:33:48.761Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0puh865",
-    "username": "kuria",
+    "id": "Umge1gamo143",
+    "username": "otema",
     "password": "F004",
     "role": "farmer",
     "farmerId": "F004",
-    "createdAt": "2025-09-16T10:33:48.761Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0puh517",
-    "username": "nganga",
+    "id": "Umge1gamo188",
+    "username": "kimemia",
     "password": "F005",
     "role": "farmer",
     "farmerId": "F005",
-    "createdAt": "2025-09-16T10:33:48.761Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0puh232",
-    "username": "mwangi",
+    "id": "Umge1gamo257",
+    "username": "kuria",
     "password": "F006",
     "role": "farmer",
     "farmerId": "F006",
-    "createdAt": "2025-09-16T10:33:48.761Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0puh769",
-    "username": "ngendo",
+    "id": "Umge1gamo880",
+    "username": "nganga",
     "password": "F007",
     "role": "farmer",
     "farmerId": "F007",
-    "createdAt": "2025-09-16T10:33:48.761Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0puh70",
-    "username": "ndungu",
+    "id": "Umge1gamo655",
+    "username": "mwangi",
     "password": "F008",
     "role": "farmer",
     "farmerId": "F008",
-    "createdAt": "2025-09-16T10:33:48.761Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0puh613",
-    "username": "kamore",
+    "id": "Umge1gamo1",
+    "username": "ngendo",
     "password": "F009",
     "role": "farmer",
     "farmerId": "F009",
-    "createdAt": "2025-09-16T10:33:48.761Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0puh462",
-    "username": "guchu",
+    "id": "Umge1gamo465",
+    "username": "ndungu",
     "password": "F010",
     "role": "farmer",
     "farmerId": "F010",
-    "createdAt": "2025-09-16T10:33:48.761Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0puh505",
-    "username": "njeri",
+    "id": "Umge1gamo163",
+    "username": "kamore",
     "password": "F011",
     "role": "farmer",
     "farmerId": "F011",
-    "createdAt": "2025-09-16T10:33:48.761Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0pui146",
-    "username": "kariuki",
+    "id": "Umge1gamo69",
+    "username": "guchu",
     "password": "F012",
     "role": "farmer",
     "farmerId": "F012",
-    "createdAt": "2025-09-16T10:33:48.762Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0pui563",
-    "username": "muiruri",
+    "id": "Umge1gamo346",
+    "username": "njeri",
     "password": "F013",
     "role": "farmer",
     "farmerId": "F013",
-    "createdAt": "2025-09-16T10:33:48.762Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0pui604",
-    "username": "muchiri",
+    "id": "Umge1gamo44",
+    "username": "kariuki",
     "password": "F014",
     "role": "farmer",
     "farmerId": "F014",
-    "createdAt": "2025-09-16T10:33:48.762Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0pui460",
-    "username": "mwangi1",
+    "id": "Umge1gamo214",
+    "username": "muiruri",
     "password": "F015",
     "role": "farmer",
     "farmerId": "F015",
-    "createdAt": "2025-09-16T10:33:48.762Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0pui492",
-    "username": "kiarie",
+    "id": "Umge1gamo3",
+    "username": "muchiri",
     "password": "F016",
     "role": "farmer",
     "farmerId": "F016",
-    "createdAt": "2025-09-16T10:33:48.762Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0pui2",
-    "username": "kimani",
+    "id": "Umge1gamo507",
+    "username": "mwangi1",
     "password": "F017",
     "role": "farmer",
     "farmerId": "F017",
-    "createdAt": "2025-09-16T10:33:48.762Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0pui449",
-    "username": "macharia",
+    "id": "Umge1gamo329",
+    "username": "kiarie",
     "password": "F018",
     "role": "farmer",
     "farmerId": "F018",
-    "createdAt": "2025-09-16T10:33:48.762Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0pui467",
-    "username": "gichuki",
+    "id": "Umge1gamo871",
+    "username": "kimani",
     "password": "F019",
     "role": "farmer",
     "farmerId": "F019",
-    "createdAt": "2025-09-16T10:33:48.762Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0pui204",
-    "username": "kimani1",
+    "id": "Umge1gamo59",
+    "username": "macharia",
     "password": "F020",
     "role": "farmer",
     "farmerId": "F020",
-    "createdAt": "2025-09-16T10:33:48.762Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0pui154",
-    "username": "kinyaga",
+    "id": "Umge1gamo981",
+    "username": "gichuki",
     "password": "F021",
     "role": "farmer",
     "farmerId": "F021",
-    "createdAt": "2025-09-16T10:33:48.762Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0pui219",
-    "username": "macharia1",
+    "id": "Umge1gamo585",
+    "username": "kimani1",
     "password": "F022",
     "role": "farmer",
     "farmerId": "F022",
-    "createdAt": "2025-09-16T10:33:48.762Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0pui590",
-    "username": "wangui",
+    "id": "Umge1gamo691",
+    "username": "kinyaga",
     "password": "F023",
     "role": "farmer",
     "farmerId": "F023",
-    "createdAt": "2025-09-16T10:33:48.762Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0pui935",
-    "username": "wangui1",
+    "id": "Umge1gamo662",
+    "username": "macharia1",
     "password": "F024",
     "role": "farmer",
     "farmerId": "F024",
-    "createdAt": "2025-09-16T10:33:48.762Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0pui377",
-    "username": "wanja",
+    "id": "Umge1gamo778",
+    "username": "wangui",
     "password": "F025",
     "role": "farmer",
     "farmerId": "F025",
-    "createdAt": "2025-09-16T10:33:48.762Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0pui322",
-    "username": "wangari",
+    "id": "Umge1gamo959",
+    "username": "wangui1",
     "password": "F026",
     "role": "farmer",
     "farmerId": "F026",
-    "createdAt": "2025-09-16T10:33:48.762Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0puj451",
-    "username": "akinyi",
+    "id": "Umge1gamo96",
+    "username": "wanja",
     "password": "F027",
     "role": "farmer",
     "farmerId": "F027",
-    "createdAt": "2025-09-16T10:33:48.763Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0puj965",
-    "username": "kalekye",
+    "id": "Umge1gamo103",
+    "username": "wangari1",
     "password": "F028",
     "role": "farmer",
     "farmerId": "F028",
-    "createdAt": "2025-09-16T10:33:48.763Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0puj912",
-    "username": "mbau",
+    "id": "Umge1gamo919",
+    "username": "akinyi",
     "password": "F029",
     "role": "farmer",
     "farmerId": "F029",
-    "createdAt": "2025-09-16T10:33:48.763Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0puj705",
-    "username": "nguya",
+    "id": "Umge1gamo260",
+    "username": "kalekye",
     "password": "F030",
     "role": "farmer",
     "farmerId": "F030",
-    "createdAt": "2025-09-16T10:33:48.763Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0puj384",
-    "username": "odhiambo",
+    "id": "Umge1gamo539",
+    "username": "mbau",
     "password": "F031",
     "role": "farmer",
     "farmerId": "F031",
-    "createdAt": "2025-09-16T10:33:48.763Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0puj540",
-    "username": "karanja",
+    "id": "Umge1gamo897",
+    "username": "nguya",
     "password": "F032",
     "role": "farmer",
     "farmerId": "F032",
-    "createdAt": "2025-09-16T10:33:48.763Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0puj856",
-    "username": "muthoni",
+    "id": "Umge1gamo564",
+    "username": "odhiambo",
     "password": "F033",
     "role": "farmer",
     "farmerId": "F033",
-    "createdAt": "2025-09-16T10:33:48.763Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0puj970",
-    "username": "nyambura",
+    "id": "Umge1gamo553",
+    "username": "karanja",
     "password": "F034",
     "role": "farmer",
     "farmerId": "F034",
-    "createdAt": "2025-09-16T10:33:48.763Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0puj27",
-    "username": "wanjiru",
+    "id": "Umge1gamo418",
+    "username": "muthoni",
     "password": "F035",
     "role": "farmer",
     "farmerId": "F035",
-    "createdAt": "2025-09-16T10:33:48.763Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0puj27",
-    "username": "wangari1",
+    "id": "Umge1gamo419",
+    "username": "nyambura",
     "password": "F036",
     "role": "farmer",
     "farmerId": "F036",
-    "createdAt": "2025-09-16T10:33:48.763Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0puj102",
-    "username": "githinji",
+    "id": "Umge1gamo801",
+    "username": "wanjiru",
     "password": "F037",
     "role": "farmer",
     "farmerId": "F037",
-    "createdAt": "2025-09-16T10:33:48.763Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0puj259",
-    "username": "wanjiku",
+    "id": "Umge1gamo739",
+    "username": "wangari2",
     "password": "F038",
     "role": "farmer",
     "farmerId": "F038",
-    "createdAt": "2025-09-16T10:33:48.763Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0puj101",
-    "username": "wambui",
+    "id": "Umge1gamo373",
+    "username": "githinji",
     "password": "F039",
     "role": "farmer",
     "farmerId": "F039",
-    "createdAt": "2025-09-16T10:33:48.763Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0puj456",
-    "username": "mueni",
+    "id": "Umge1gamo837",
+    "username": "wanjiku",
     "password": "F040",
     "role": "farmer",
     "farmerId": "F040",
-    "createdAt": "2025-09-16T10:33:48.763Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0puj150",
-    "username": "njuguna",
+    "id": "Umge1gamo389",
+    "username": "wambui",
     "password": "F041",
     "role": "farmer",
     "farmerId": "F041",
-    "createdAt": "2025-09-16T10:33:48.763Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0puj545",
-    "username": "wayua",
+    "id": "Umge1gamo84",
+    "username": "mueni",
     "password": "F042",
     "role": "farmer",
     "farmerId": "F042",
-    "createdAt": "2025-09-16T10:33:48.763Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0puj151",
-    "username": "nekesa",
+    "id": "Umge1gamo414",
+    "username": "njuguna",
     "password": "F043",
     "role": "farmer",
     "farmerId": "F043",
-    "createdAt": "2025-09-16T10:33:48.763Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0puj421",
-    "username": "wambui1",
+    "id": "Umge1gamo253",
+    "username": "wayua",
     "password": "F044",
     "role": "farmer",
     "farmerId": "F044",
-    "createdAt": "2025-09-16T10:33:48.763Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0puj515",
-    "username": "mwende",
+    "id": "Umge1gamo513",
+    "username": "nekesa",
     "password": "F045",
     "role": "farmer",
     "farmerId": "F045",
-    "createdAt": "2025-09-16T10:33:48.763Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0puj395",
-    "username": "wanjiru1",
+    "id": "Umge1gamo602",
+    "username": "wambui1",
     "password": "F046",
     "role": "farmer",
     "farmerId": "F046",
-    "createdAt": "2025-09-16T10:33:48.763Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0puj168",
-    "username": "adhiambo",
+    "id": "Umge1gamo137",
+    "username": "mwende",
     "password": "F047",
     "role": "farmer",
     "farmerId": "F047",
-    "createdAt": "2025-09-16T10:33:48.763Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf0puj262",
-    "username": "margaret",
+    "id": "Umge1gamo616",
+    "username": "wanjiru1",
     "password": "F048",
     "role": "farmer",
     "farmerId": "F048",
-    "createdAt": "2025-09-16T10:33:48.763Z"
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf2mbd25",
-    "username": "paulin",
-    "password": "paulin12",
-    "role": "staff",
-    "createdAt": "2025-09-16T10:35:17.497Z"
+    "id": "Umge1gamo191",
+    "username": "adhiambo",
+    "password": "F049",
+    "role": "farmer",
+    "farmerId": "F049",
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf3ajy825",
-    "username": "sam",
-    "password": "sam12",
-    "role": "staff",
-    "createdAt": "2025-09-16T10:35:48.910Z"
+    "id": "Umge1gamo679",
+    "username": "margaret",
+    "password": "F050",
+    "role": "farmer",
+    "farmerId": "F050",
+    "businessId": "B007",
+    "createdAt": "2025-10-05T18:31:33.840Z"
   },
   {
-    "id": "Umfmf3z4s793",
-    "username": "eunice",
-    "password": "eunice12",
-    "role": "admin",
-    "createdAt": "2025-09-16T10:36:20.764Z"
+    "id": "Umge2rcgz",
+    "username": "jane",
+    "password": "F001",
+    "role": "farmer",
+    "farmerId": "F001",
+    "businessId": "B008",
+    "createdAt": "2025-10-05T19:08:09.059Z"
   },
   {
-    "id": "Umfs4ukau459",
-    "username": "max",
-    "password": "max12",
-    "role": "staff",
-    "createdAt": "2025-09-20T10:35:42.534Z"
+    "id": "Umgeq1ykr",
+    "username": "watiri",
+    "password": "F001",
+    "role": "farmer",
+    "farmerId": "F001",
+    "businessId": "B009",
+    "createdAt": "2025-10-06T06:00:15.435Z"
+  },
+  {
+    "id": "Umgeq4rm8",
+    "username": "muthoni",
+    "password": "F002",
+    "role": "farmer",
+    "farmerId": "F002",
+    "businessId": "B009",
+    "createdAt": "2025-10-06T06:02:26.384Z"
+  },
+  {
+    "id": "Umgeqssue",
+    "username": "bilha",
+    "password": "F003",
+    "role": "farmer",
+    "farmerId": "F003",
+    "businessId": "B009",
+    "createdAt": "2025-10-06T06:21:07.718Z"
+  },
+  {
+    "id": "Umgeqy82v",
+    "username": "kimondo",
+    "password": "F004",
+    "role": "farmer",
+    "farmerId": "F004",
+    "businessId": "B009",
+    "createdAt": "2025-10-06T06:25:20.743Z"
   }
+  
 ]

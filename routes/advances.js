@@ -15,10 +15,15 @@ router.post("/", requireAuth, requireRole("admin"), async (req, res) => {
     return res.status(400).json({ error: "Missing farmerId or amount" });
   }
 
+  const loggedInUser = req.user;
+  if (!loggedInUser || !loggedInUser.businessId) {
+    return res.status(403).json({ error: "Unauthorized: No business assigned" });
+  }
+
   const farmers = await read("farmers");
-  const farmer = farmers.find(f => f.id === farmerId);
+  const farmer = farmers.find(f => f.id === farmerId && f.businessId === loggedInUser.businessId);
   if (!farmer) {
-    return res.status(404).json({ error: "Farmer not found" });
+    return res.status(404).json({ error: "Farmer not found or unauthorized" });
   }
 
   const advances = await read("advances");
@@ -26,10 +31,11 @@ router.post("/", requireAuth, requireRole("admin"), async (req, res) => {
   const newAdvance = {
     id: "A" + (advances.length + 1).toString().padStart(4, "0"),
     farmerId,
-    region: farmer.region || null, // attach farmer's region
+    region: farmer.region || null,
     amount,
     date: date || new Date(),
-    createdAt: new Date()
+    createdAt: new Date(),
+    businessId: loggedInUser.businessId // 🔐 scoped
   };
 
   advances.push(newAdvance);
@@ -40,18 +46,26 @@ router.post("/", requireAuth, requireRole("admin"), async (req, res) => {
 
 // 📖 Get all advances (Admin + Staff, with optional ?region=Central)
 router.get("/", requireAuth, requireRoles(["admin", "staff"]), async (req, res) => {
+  const loggedInUser = req.user;
+  if (!loggedInUser || !loggedInUser.businessId) {
+    return res.status(403).json({ error: "Unauthorized: No business assigned" });
+  }
+
   const { region } = req.query;
   const advances = await read("advances");
   const farmers = await read("farmers");
 
-  let filtered = advances;
+  // ✅ Filter advances by businessId
+  let filtered = advances.filter(a => a.businessId === loggedInUser.businessId);
+
+  // ✅ Optional region filter
   if (region) {
     filtered = filtered.filter(a => a.region && a.region.toLowerCase() === region.toLowerCase());
   }
 
-  // Attach farmer info
+  // ✅ Attach farmer info (only from same business)
   const enriched = filtered.map(a => {
-    const farmer = farmers.find(f => f.id === a.farmerId);
+    const farmer = farmers.find(f => f.id === a.farmerId && f.businessId === loggedInUser.businessId);
     return {
       ...a,
       farmer: farmer ? { id: farmer.id, name: farmer.name } : { id: a.farmerId, name: "Unknown" }
@@ -63,25 +77,36 @@ router.get("/", requireAuth, requireRoles(["admin", "staff"]), async (req, res) 
 // 👤 Farmer views their own advances
 router.get("/my", requireAuth, requireRole("farmer"), async (req, res) => {
   const advances = await read("advances");
-  const myRecords = advances.filter(a => a.farmerId === req.user.farmerId);
+  const myRecords = advances.filter(
+    a => a.farmerId === req.user.farmerId && a.businessId === req.user.businessId
+  );
   res.json(myRecords);
 });
 
 router.get("/:farmerId", requireAuth, requireRoles(["admin", "staff"]), async (req, res) => {
   try {
+    const loggedInUser = req.user;
+    if (!loggedInUser || !loggedInUser.businessId) {
+      return res.status(403).json({ error: "Unauthorized: No business assigned" });
+    }
+
     const advances = await read("advances");
     const farmers = await read("farmers");
 
-    const farmerAdvances = advances.filter(a => a.farmerId === req.params.farmerId);
-    const farmer = farmers.find(f => f.id === req.params.farmerId);
-
-    if (farmerAdvances.length === 0) {
-      return res.json([]);
+    const farmer = farmers.find(
+      f => f.id === req.params.farmerId && f.businessId === loggedInUser.businessId
+    );
+    if (!farmer) {
+      return res.status(404).json({ error: "Farmer not found or unauthorized" });
     }
+
+    const farmerAdvances = advances.filter(
+      a => a.farmerId === req.params.farmerId && a.businessId === loggedInUser.businessId
+    );
 
     const enriched = farmerAdvances.map(a => ({
       ...a,
-      farmer: farmer ? { id: farmer.id, name: farmer.name } : { id: a.farmerId, name: "Unknown" }
+      farmer: { id: farmer.id, name: farmer.name }
     }));
 
     res.json(enriched);
@@ -95,11 +120,16 @@ router.put("/:id", requireAuth, requireRole("admin"), async (req, res) => {
   const { id } = req.params;
   const { amount, date } = req.body;
 
+  const loggedInUser = req.user;
+  if (!loggedInUser || !loggedInUser.businessId) {
+    return res.status(403).json({ error: "Unauthorized: No business assigned" });
+  }
+
   const advances = await read("advances");
-  const record = advances.find(a => a.id === id);
+  const record = advances.find(a => a.id === id && a.businessId === loggedInUser.businessId);
 
   if (!record) {
-    return res.status(404).json({ error: "Advance record not found" });
+    return res.status(404).json({ error: "Advance record not found or unauthorized" });
   }
 
   if (amount !== undefined) record.amount = amount;
@@ -108,15 +138,22 @@ router.put("/:id", requireAuth, requireRole("admin"), async (req, res) => {
   await write("advances", advances);
   res.json({ ok: true, record });
 });
-
 // ❌ Delete advance (Admin only)
 router.delete("/:id", requireAuth, requireRole("admin"), async (req, res) => {
   const { id } = req.params;
-  let advances = await read("advances");
 
-  const index = advances.findIndex(a => a.id === id);
+  const loggedInUser = req.user;
+  if (!loggedInUser || !loggedInUser.businessId) {
+    return res.status(403).json({ error: "Unauthorized: No business assigned" });
+  }
+
+  let advances = await read("advances");
+  const index = advances.findIndex(
+    a => a.id === id && a.businessId === loggedInUser.businessId
+  );
+
   if (index === -1) {
-    return res.status(404).json({ error: "Advance record not found" });
+    return res.status(404).json({ error: "Advance record not found or unauthorized" });
   }
 
   const deleted = advances.splice(index, 1);
@@ -124,5 +161,4 @@ router.delete("/:id", requireAuth, requireRole("admin"), async (req, res) => {
 
   res.json({ ok: true, deleted });
 });
-
 module.exports = router;

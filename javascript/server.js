@@ -1,9 +1,29 @@
 
 // server.js
+require("dotenv").config({ path: __dirname + "/.env" });
+const mongoose = require("mongoose");
+
+
+//console.log("🔑 Consumer Key:", process.env.MPESA_CONSUMER_KEY);
+const { read, write } = require("../utils/fs");
 const express = require("express");
 const cors = require("cors");
-require("dotenv").config();
+const app = express();
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ MongoDB Connected Successfully"))
+  .catch((err) => console.error("❌ MongoDB Connection Failed:", err.message));
+// ✅ Global middlewares
+app.use(cors()); // CORS first
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// ✅ Import middleware
+const { requireAuth } = require("../middleware/auth");
+const { requireActiveSubscription } = require("../middleware/subscription");
+
 // ✅ Import routes
+const devRoutes = require("../routes/dev");
 const milkRoutes = require("../routes/milk");
 const farmerRoutes = require("../routes/farmers");
 const reportRoutes = require("../routes/reports");
@@ -12,30 +32,31 @@ const advancesRoutes = require("../routes/advances");
 const summaryRoutes = require("../routes/summary");
 const milkExportRoutes = require("../routes/milkExport");
 const dataRoutes = require("../routes/data");
-const mpesaRoutes = require("../routes/mpesa");
+const usersRoutes = require("../routes/users");
+const subscriptionRoutes = require("../routes/subscription");
 
-// ✅ Middleware
-const  {requireAuth}  = require("../middleware/auth");
-const { requireActiveSubscription } = require("../middleware/subscription");
-const app = express();
-
-// ✅ Global middlewares
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// const mpesaRoutes = require("../routes/mpesa");
 
 // ✅ Routes
-app.use("/api/mpesa", mpesaRoutes);
+app.use("/dev", devRoutes);
+app.post("/callback", (req, res) => {
+  //console.log("STK Callback Received:", JSON.stringify(req.body, null, 2));
+  res.sendStatus(200);
+});
+
+// app.use("/api/mpesa", mpesaRoutes);
 app.use("/api/auth", authRoutes); // login/register
-app.use("/api", require("../routes/data"));
+app.use("/api/data", dataRoutes);
+app.use("/api/subscription", subscriptionRoutes);
 app.use("/api/farmers", requireAuth, requireActiveSubscription, farmerRoutes);
 app.use("/api/milk", requireAuth, requireActiveSubscription, milkRoutes);
 app.use("/api/milk", milkExportRoutes); // export-related endpoints
+app.use("/api/users", requireAuth, requireActiveSubscription, usersRoutes);
 app.use("/api/reports", requireAuth, requireActiveSubscription, reportRoutes);
 app.use("/api/advances", requireAuth, requireActiveSubscription, advancesRoutes);
 app.use("/api/summary", requireAuth, requireActiveSubscription, summaryRoutes);
-app.use("/api/data", dataRoutes);
 app.use("/api/subscription", require("../routes/subscription"));
+
 // ✅ Example test route
 app.get("/api/reports/monthly-collections",
   requireAuth,
@@ -67,20 +88,51 @@ function nextFarmerId(farmers) {
 }
 
 /* ---------- Farmers Routes ----------*/ 
-
-// GET all farmers (optionally only active)
+// ✅ GET all farmers (filtered by businessId and optional active status)
 app.get('/api/farmers', async (req, res) => {
-  const onlyActive = String(req.query.active || 'true') === 'true';
-  const farmers = await read('farmers');
-  const data = onlyActive ? farmers.filter(f => f.isActive !== false) : farmers;
-  res.json(data);
+  try {
+    const user = req.user; // injected by auth middleware
+
+    if (!user) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    const onlyActive = String(req.query.active || 'true') === 'true';
+    const farmers = await read('farmers');
+
+    // ✅ Filter by businessId (so each business only sees their farmers)
+    let data = farmers.filter(f => f.businessId === user.businessId);
+
+    // ✅ Further filter active/inactive if needed
+    if (onlyActive) {
+      data = data.filter(f => f.isActive !== false);
+    }
+
+    res.json(data);
+  } catch (err) {
+    console.error("Error fetching farmers:", err);
+    res.status(500).json({ error: "Server error fetching farmers" });
+  }
 });
-// ✅ GET farmer by ID (skip inactive)
+// ✅ GET farmer by ID (filter by businessId)
 app.get('/api/farmers/:farmerId', async (req, res) => {
   try {
     const { farmerId } = req.params;
+    const user = req.user; // logged-in user injected by auth middleware
+
+    if (!user) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
     const farmers = await read('farmers');
-    const farmer = farmers.find(f => f.id === farmerId && f.isActive !== false);
+
+    // ✅ Filter by both farmerId + businessId
+    const farmer = farmers.find(
+      f =>
+        f.id === farmerId &&
+        f.isActive !== false &&
+        f.businessId === user.businessId // ✅ match business, not individual owner
+    );
 
     if (!farmer) {
       return res.status(404).json({ error: 'Farmer not found or inactive' });
@@ -92,83 +144,122 @@ app.get('/api/farmers/:farmerId', async (req, res) => {
     res.status(500).json({ error: 'Server error fetching farmer' });
   }
 });
-// POST create farmer  { name, phone }
+// POST create farmer { name, phone }
 app.post('/api/farmers', async (req, res) => {
   const { name, phone } = req.body || {};
   if (!name || !phone) {
     return res.status(400).json({ error: 'name and phone are required' });
   }
 
+  // ✅ Ensure the logged in user is attached
+  const loggedInUser = req.user; 
+  if (!loggedInUser || !loggedInUser.businessId) {
+    return res.status(403).json({ error: "Unauthorized: No business assigned" });
+  }
+
   const farmers = await read('farmers');
+
   const farmer = {
     id: nextFarmerId(farmers),
     name,
     phone,
     isActive: true,
     createdAt: new Date().toISOString(),
+    businessId: loggedInUser.businessId   // 🔑 attach farmer to this business
   };
 
   farmers.push(farmer);
   await write('farmers', farmers);
+
   res.status(201).json(farmer);
 });
-
-// PUT update farmer by id
+// ✅ PUT update farmer by id (scoped by businessId)
 app.put('/api/farmers/:id', async (req, res) => {
-  const { id } = req.params;
-  const { name, phone, isActive, region} = req.body || {};
+  try {
+    const { id } = req.params;
+    const { name, phone, isActive, region } = req.body || {};
+    const { businessId } = req.user; // 🔑 enforce ownership
 
-  const farmers = await read('farmers');
-  const idx = farmers.findIndex(f => f.id === id);
-  if (idx === -1) return res.status(404).json({ error: 'Farmer not found' });
+    // Normalize ID
+    let farmerId = String(id).toUpperCase();
+    if (!farmerId.startsWith("F")) farmerId = "F" + farmerId;
 
-  if (name !== undefined) farmers[idx].name = name;
-  if (phone !== undefined) farmers[idx].phone = phone;
-  if(region !== undefined) farmers[idx].region = region;
-  if (isActive !== undefined) farmers[idx].isActive = !!isActive;
+    let farmers = await read('farmers');
+    const farmer = farmers.find(f => f.id === farmerId && f.businessId === businessId);
 
-  await write('farmers', farmers);
-  res.json(farmers[idx]);
+    if (!farmer) {
+      return res.status(404).json({ error: 'Farmer not found in your business' });
+    }
+
+    // 🔄 Apply updates if provided
+    if (name !== undefined) farmer.name = name;
+    if (phone !== undefined) farmer.phone = phone;
+    if (region !== undefined) farmer.region = region;
+    if (isActive !== undefined) farmer.isActive = !!isActive;
+
+    await write('farmers', farmers);
+
+    res.json(farmer);
+  } catch (err) {
+    console.error("Error updating farmer:", err);
+    res.status(500).json({ error: "Server error updating farmer" });
+  }
 });
-
-// DELETE (soft delete) farmer by id
+// ✅ DELETE (soft delete) farmer by id, scoped by businessId
 app.delete('/api/farmers/:id', async (req, res) => {
-  const { id } = req.params;
-  const farmers = await read('farmers');
-  const idx = farmers.findIndex(f => f.id === id);
-  if (idx === -1) return res.status(404).json({ error: 'Farmer not found' });
+  try {
+    const { id } = req.params;
+    const { businessId } = req.user; // 🔑 enforce ownership
 
-  farmers[idx].isActive = false; // soft delete
-  await write('farmers', farmers);
-  res.json({ ok: true });
+    // Normalize ID (auto-add "F")
+    let farmerId = String(id).toUpperCase();
+    if (!farmerId.startsWith("F")) farmerId = "F" + farmerId;
+
+    let farmers = await read('farmers');
+    const farmer = farmers.find(f => f.id === farmerId && f.businessId === businessId);
+
+    if (!farmer) {
+      return res.status(404).json({ error: 'Farmer not found in your business' });
+    }
+
+    farmer.isActive = false; // 🔄 soft delete
+    await write('farmers', farmers);
+
+    res.json({ ok: true, farmerId, scopedToBusiness: businessId });
+  } catch (err) {
+    console.error("Error soft-deleting farmer:", err);
+    res.status(500).json({ error: "Server error soft deleting farmer" });
+  }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+
+
+
+
+
 /* ---------- Milk Routes ---------- */
-
-// GET milk records (all or filtered by farmerId)
+// ✅ GET milk records (all or filtered by farmerId) - scoped by businessId
 app.get('/api/milk', async (req, res) => {
-  const milk = await read('milk');
-  const farmers = await read('farmers');
-  const { farmer } = req.query;
-
   if (!req.user) {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
-  let filtered = milk;
+  const { businessId } = req.user;
+  const milk = await read('milkRecords');
+  const farmers = await read('farmers');
+
+  const { farmer } = req.query;
+  let filtered = milk.filter(r => r.businessId === businessId);
 
   // 👇 Staff only sees their own records
   if (req.user.role === "staff") {
     filtered = filtered.filter(r => r.createdBy === req.user.id);
   }
 
-  // ✅ farmer filter (works for both staff/admin)
+  // ✅ farmer filter (by ID or name)
   if (farmer) {
     filtered = filtered.filter(r => {
-      const f = farmers.find(fm => fm.id === r.farmerId);
+      const f = farmers.find(fm => fm.id === r.farmerId && fm.businessId === businessId);
       return (
         r.farmerId.toLowerCase() === farmer.toLowerCase() ||
         (f && f.name.toLowerCase().includes(farmer.toLowerCase()))
@@ -178,16 +269,20 @@ app.get('/api/milk', async (req, res) => {
 
   const enriched = filtered.map(r => ({
     ...r,
-    farmerName: (farmers.find(f => f.id === r.farmerId) || {}).name || 'Unknown'
+    farmerName: (farmers.find(f => f.id === r.farmerId && f.businessId === businessId) || {}).name || 'Unknown'
   }));
 
   res.json(enriched);
 });
-// GET a single milk record by its recordId
+
+
+// ✅ GET a single milk record by ID
 app.get('/api/milk/:id', async (req, res) => {
-  const milk = await read('milk');
+  const { businessId } = req.user;
+  const milk = await read('milkRecords');
   const farmers = await read('farmers');
-  const record = milk.find(r => r.id === req.params.id);
+
+  const record = milk.find(r => r.id === req.params.id && r.businessId === businessId);
 
   if (!record) {
     return res.status(404).json({ error: "Milk record not found" });
@@ -198,32 +293,39 @@ app.get('/api/milk/:id', async (req, res) => {
     return res.status(403).json({ error: "Forbidden" });
   }
 
-  const farmer = farmers.find(f => f.id === record.farmerId);
+  const farmer = farmers.find(f => f.id === record.farmerId && f.businessId === businessId);
   res.json({
     ...record,
     farmerName: farmer ? farmer.name : 'Unknown'
   });
 });
 
-// PUT update milk record by ID
+
+// ✅ PUT update milk record by ID
 app.put('/api/milk/:id', async (req, res) => {
   const { id } = req.params;
   const { farmerId, date, litres, session } = req.body || {};
+  const { businessId } = req.user;
 
   if (!farmerId || !date || !session || isNaN(litres) || litres <= 0) {
     return res.status(400).json({ error: 'Invalid milk record' });
   }
 
-  const milk = await read('milk');
-  const index = milk.findIndex(r => r.id === id);
+  const milk = await read('milkRecords');
+  const index = milk.findIndex(r => r.id === id && r.businessId === businessId);
 
   if (index === -1) {
     return res.status(404).json({ error: 'Record not found' });
   }
 
+  // Normalize farmerId
+  let normFarmerId = String(farmerId).toUpperCase();
+  if (!normFarmerId.startsWith("F")) normFarmerId = "F" + normFarmerId;
+
   // ✅ Prevent duplicate (same farmer/date/session but different ID)
   const duplicate = milk.find(r =>
-    r.farmerId === farmerId &&
+    r.businessId === businessId &&
+    r.farmerId === normFarmerId &&
     r.date === date &&
     r.session === session &&
     r.id !== id
@@ -234,45 +336,46 @@ app.put('/api/milk/:id', async (req, res) => {
 
   milk[index] = {
     ...milk[index],
-    farmerId,
+    farmerId: normFarmerId,
     date,
     litres: Number(litres),
     session,
     updatedAt: new Date().toISOString(),
   };
-  
-  console.log("Updating ID:", id);
-  console.log("Incoming data:", { farmerId, date, session, litres });
-  console.log("Current record:", milk[index]);
-  console.log("Duplicate check against:", milk.map(r => ({ id: r.id, farmerId: r.farmerId, date: r.date, session: r.session })));
-  
-  await write('milk', milk);
+
+  await write('milkRecords', milk);
   res.json(milk[index]);
 });
 
 
-// DELETE milk record by ID
+// ✅ DELETE (soft delete) milk record by ID
 app.delete('/api/milk/:id', async (req, res) => {
   const { id } = req.params;
-  const milk = await read('milk');
+  const { businessId } = req.user;
+  const milk = await read('milkRecords');
 
-  const index = milk.findIndex(r => r.id === id);
+  const index = milk.findIndex(r => r.id === id && r.businessId === businessId);
   if (index === -1) {
     return res.status(404).json({ error: 'Record not found' });
   }
 
-  const deleted = milk.splice(index, 1)[0];
-  await write('milk', milk);
+  milk[index].isActive = false; // ✅ soft delete instead of removing
+  milk[index].deletedAt = new Date().toISOString();
 
-  res.json({ message: 'Record deleted successfully', deleted });
+  await write('milkRecords', milk);
+  res.json({ message: 'Record soft-deleted successfully', deleted: milk[index] });
 });
 
 /* ---------- Advances Routes ----------*/ 
-
-// ✅ GET all advances
 app.get('/api/advances', async (req, res) => {
+  const loggedInUser = req.user;
+  if (!loggedInUser || !loggedInUser.businessId) {
+    return res.status(403).json({ error: "Unauthorized: No business assigned" });
+  }
+
   const advances = await read('advances');
-  res.json(advances);
+  const filtered = advances.filter(a => a.businessId === loggedInUser.businessId);
+  res.json(filtered);
 });
 
 // ✅ POST add advance { farmerId, date, amount }
@@ -282,12 +385,18 @@ app.post('/api/advances', async (req, res) => {
     return res.status(400).json({ error: 'farmerId, date, amount required' });
   }
 
+  const loggedInUser = req.user;
+  if (!loggedInUser || !loggedInUser.businessId) {
+    return res.status(403).json({ error: "Unauthorized: No business assigned" });
+  }
+
   const advances = await read('advances');
   const record = {
     id: 'A' + Date.now(),
     farmerId,
     date,
     amount: Number(amount),
+    businessId: loggedInUser.businessId, // 🔑 attach to business
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };
@@ -306,11 +415,16 @@ app.put('/api/advances/:id', async (req, res) => {
     return res.status(400).json({ error: 'farmerId, date, amount required' });
   }
 
+  const loggedInUser = req.user;
+  if (!loggedInUser || !loggedInUser.businessId) {
+    return res.status(403).json({ error: "Unauthorized: No business assigned" });
+  }
+
   const advances = await read('advances');
-  const index = advances.findIndex(a => a.id === id);
+  const index = advances.findIndex(a => a.id === id && a.businessId === loggedInUser.businessId);
 
   if (index === -1) {
-    return res.status(404).json({ error: 'Advance not found' });
+    return res.status(404).json({ error: 'Advance not found or unauthorized' });
   }
 
   advances[index] = {
@@ -324,15 +438,20 @@ app.put('/api/advances/:id', async (req, res) => {
   await write('advances', advances);
   res.json(advances[index]);
 });
-
 // ✅ DELETE advance by ID
 app.delete('/api/advances/:id', async (req, res) => {
   const { id } = req.params;
+
+  const loggedInUser = req.user;
+  if (!loggedInUser || !loggedInUser.businessId) {
+    return res.status(403).json({ error: "Unauthorized: No business assigned" });
+  }
+
   let advances = await read('advances');
-  const index = advances.findIndex(a => a.id === id);
+  const index = advances.findIndex(a => a.id === id && a.businessId === loggedInUser.businessId);
 
   if (index === -1) {
-    return res.status(404).json({ error: 'Advance not found' });
+    return res.status(404).json({ error: 'Advance not found or unauthorized' });
   }
 
   const deleted = advances[index];
@@ -341,33 +460,7 @@ app.delete('/api/advances/:id', async (req, res) => {
   await write('advances', advances);
   res.json({ success: true, deleted });
 });
-
-
-
-const path = require("path");
-
-// Middlewares
-
-
-// Import routes
-const usersRoute = require("../routes/users");
-const farmersRoute = require("../routes/farmers");
-const milkRoute = require("../routes/milk");
-const advancesRoute = require("../routes/advances");
-const summaryRoute = require("../routes/summary");
-const authRoute = require("../routes/auth");
-
-// Use routes
-app.use(express.json());
-app.use("/api/users", usersRoute);
-app.use("/api/farmers", farmersRoute);
-app.use("/api/milk", milkRoute);
-app.use("/api/advances", advancesRoute);
-app.use("/api/summary", summaryRoute);
-app.use("/api/auth", authRoute);
-app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
-
-// POST bulk import farmers
+// ✅ POST bulk import farmers (per business)
 app.post("/api/farmers/import", async (req, res) => {
   try {
     const farmers = Array.isArray(req.body) ? req.body : req.body.farmers;
@@ -375,15 +468,19 @@ app.post("/api/farmers/import", async (req, res) => {
       return res.status(400).json({ error: "Invalid data" });
     }
 
+    const { businessId } = req.user; // 🔑 get business context
+
     const dbFarmers = await read("farmers");
     const dbUsers = await read("users");
 
-    let nextIdNum = dbFarmers.length + 1;
+    // ✅ Only count farmers for this business when generating IDs
+    const businessFarmers = dbFarmers.filter(f => f.businessId === businessId);
+    let nextIdNum = businessFarmers.length + 1;
 
     const createdAccounts = [];
 
     for (const f of farmers) {
-      // ✅ Normalize farmerId
+      // ✅ Normalize farmerId per business
       let rawId = f.id || String(nextIdNum++).padStart(3, "0");
       let farmerId = rawId.startsWith("F") ? rawId : "F" + rawId;
 
@@ -393,22 +490,29 @@ app.post("/api/farmers/import", async (req, res) => {
         phone: f.phone || f.CONTACTS || f["Phone Number"] || "-",
         region: f.region || "-",
         isActive: f.isActive !== undefined ? f.isActive : true,
+        businessId, // 🔑 tie farmer to the correct business
         createdAt: f.createdAt || new Date().toISOString()
       };
 
       const exists = dbFarmers.find(
-        farmer => farmer.id === newFarmer.id || farmer.phone === newFarmer.phone
+        farmer =>
+          (farmer.id === newFarmer.id && farmer.businessId === businessId) ||
+          (farmer.phone === newFarmer.phone && farmer.businessId === businessId)
       );
 
       if (!exists) {
         dbFarmers.push(newFarmer);
 
-        // 🔑 Create unique username
+        // 🔑 Create unique username (per business)
         let baseUsername = newFarmer.name.split(" ")[0].toLowerCase();
         let username = baseUsername;
         let counter = 1;
 
-        while (dbUsers.find(u => u.username === username)) {
+        while (
+          dbUsers.find(
+            u => u.username === username && u.businessId === businessId
+          )
+        ) {
           username = baseUsername + counter++;
         }
 
@@ -416,11 +520,15 @@ app.post("/api/farmers/import", async (req, res) => {
         const password = farmerId;
 
         const newUser = {
-          id: "U" + Date.now().toString(36) + Math.floor(Math.random() * 1000),
+          id:
+            "U" +
+            Date.now().toString(36) +
+            Math.floor(Math.random() * 1000),
           username,
           password,
           role: "farmer",
           farmerId: farmerId,
+          businessId, // 🔑 tie login to business
           createdAt: new Date().toISOString()
         };
 
@@ -435,7 +543,10 @@ app.post("/api/farmers/import", async (req, res) => {
       }
     }
 
-    console.log("Saving farmers:", dbFarmers.length);
+    console.log(
+      `Saving farmers for business ${businessId}:`,
+      dbFarmers.filter(f => f.businessId === businessId).length
+    );
     await write("farmers", dbFarmers);
     await write("users", dbUsers);
 
@@ -449,10 +560,12 @@ app.post("/api/farmers/import", async (req, res) => {
     res.status(500).json({ error: "Server error importing farmers" });
   }
 });
-// ✅ Bulk delete farmers (PERMANENT + auto-fix missing F)
+// ✅ Bulk delete farmers (scoped by businessId, PERMANENT + auto-fix missing F)
 app.post("/api/farmers/bulk-delete", async (req, res) => {
   try {
-    let { ids } = req.body; 
+    let { ids } = req.body;
+    const { businessId } = req.user; // 🔑 enforce business ownership
+
     if (!ids || !Array.isArray(ids) || ids.length === 0) {
       return res.status(400).json({ error: "No farmer IDs provided" });
     }
@@ -483,9 +596,18 @@ app.post("/api/farmers/bulk-delete", async (req, res) => {
       return { ...u, farmerId: fixedFarmerId };
     });
 
-    // Now actually delete matching IDs
-    farmers = farmers.filter(f => !ids.includes(f.id));
-    users = users.filter(u => !ids.includes(u.farmerId));
+    // ✅ Only delete farmers & users that belong to THIS business
+    const farmersToDelete = farmers.filter(
+      f => ids.includes(f.id) && f.businessId === businessId
+    ).map(f => f.id);
+
+    if (farmersToDelete.length === 0) {
+      return res.status(404).json({ error: "No matching farmers found in your business" });
+    }
+
+    // Perform delete
+    farmers = farmers.filter(f => !farmersToDelete.includes(f.id));
+    users = users.filter(u => !farmersToDelete.includes(u.farmerId));
 
     await write("farmers", farmers);
     await write("users", users);
@@ -493,17 +615,19 @@ app.post("/api/farmers/bulk-delete", async (req, res) => {
     res.json({
       success: true,
       deletedFarmers: beforeFarmers - farmers.length,
-      deletedUsers: beforeUsers - users.length
+      deletedUsers: beforeUsers - users.length,
+      scopedToBusiness: businessId
     });
   } catch (err) {
     console.error("Error bulk deleting farmers:", err);
     res.status(500).json({ error: "Server error bulk deleting farmers" });
   }
 });
-// ✅ Bulk import milk records
+// ✅ Bulk import milk records (scoped by businessId)
 app.post("/api/milk/bulk-import", async (req, res) => {
   try {
     const { records } = req.body;
+    const { businessId } = req.user; // 🔑 enforce ownership
 
     if (!records || !Array.isArray(records) || records.length === 0) {
       return res.status(400).json({ error: "No milk records provided" });
@@ -511,24 +635,40 @@ app.post("/api/milk/bulk-import", async (req, res) => {
 
     let milkRecords = await read("milkRecords");
 
-    // Helper to generate milk record IDs like M001, M002...
+    // Helper to generate milk record IDs like M0001, M0002...
     const generateMilkId = (index) => {
       const nextNumber = milkRecords.length + index + 1;
       return "M" + nextNumber.toString().padStart(4, "0");
     };
 
-    const newRecords = records.map((rec, i) => ({
-      id: generateMilkId(i),
-      farmerId: rec.farmerId,
-      litres: Number(rec.litres),
-      session: rec.session || "Morning",
-      region: rec.region || "Default",
-      date: rec.date,
-      createdAt: new Date().toISOString(),
-    }));
+    const newRecords = records
+      .map((rec, i) => {
+        if (!rec.farmerId || !rec.litres || !rec.date) {
+          return null; // skip invalid
+        }
+
+        // Normalize farmerId
+        let farmerId = String(rec.farmerId).toUpperCase();
+        if (!farmerId.startsWith("F")) farmerId = "F" + farmerId;
+
+        return {
+          id: generateMilkId(i),
+          businessId, // 🔑 link to business
+          farmerId,
+          litres: Number(rec.litres),
+          session: rec.session || "Morning",
+          region: rec.region || "Default",
+          date: rec.date,
+          createdAt: new Date().toISOString(),
+        };
+      })
+      .filter(Boolean);
+
+    if (newRecords.length === 0) {
+      return res.status(400).json({ error: "No valid milk records found" });
+    }
 
     milkRecords.push(...newRecords);
-
     await write("milkRecords", milkRecords);
 
     res.json({ success: true, imported: newRecords.length });
@@ -537,7 +677,6 @@ app.post("/api/milk/bulk-import", async (req, res) => {
     res.status(500).json({ error: "Server error bulk importing milk records" });
   }
 });
-
 app.get("/test-export", async (req, res) => {
   const ExcelJS = require("exceljs");
   const workbook = new ExcelJS.Workbook();

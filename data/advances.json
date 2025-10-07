@@ -1,105 +1,20 @@
 [
   {
-    "id": "A1755768567327",
-    "farmerId": "F001",
-    "date": "2025-08-21",
-    "amount": 500,
-    "createdAt": "2025-08-21T09:29:27.327Z",
-    "updatedAt": "2025-08-21T09:29:27.327Z"
-  },
-  {
-    "id": "A0005",
-    "farmerId": "F001",
-    "amount": 500,
-    "date": "2025-08-25",
-    "createdAt": "2025-09-01T18:54:24.727Z"
-  },
-  {
-    "id": "A0005",
-    "farmerId": "F002",
-    "region": null,
-    "amount": 900,
-    "date": "2025-09-06",
-    "createdAt": "2025-09-06T18:11:03.735Z"
-  },
-  {
-    "id": "A0005",
-    "farmerId": "F002",
-    "region": null,
-    "amount": 3500,
-    "date": "2025-09-07",
-    "createdAt": "2025-09-07T15:12:12.444Z"
-  },
-  {
-    "id": "A0006",
-    "farmerId": "F001",
-    "region": null,
-    "amount": 7900,
-    "date": "2025-09-09",
-    "createdAt": "2025-09-09T20:13:25.793Z"
-  },
-  {
-    "id": "A0007",
-    "farmerId": "F017",
-    "region": "Route C",
-    "amount": 800,
-    "date": "2025-09-11",
-    "createdAt": "2025-09-11T16:26:52.044Z"
-  },
-  {
-    "id": "A0009",
-    "farmerId": "F022",
-    "region": "Route C",
-    "amount": 1200,
-    "date": "2025-09-11",
-    "createdAt": "2025-09-11T18:54:52.707Z"
-  },
-  {
-    "id": "A0009",
-    "farmerId": "F022",
-    "region": "Route C",
-    "amount": 300,
-    "date": "2025-09-11",
-    "createdAt": "2025-09-11T18:55:31.867Z"
-  },
-  {
-    "id": "A0009",
-    "farmerId": "F205",
-    "region": "ngumo",
-    "amount": 3455,
-    "date": "2025-09-13",
-    "createdAt": "2025-09-13T18:30:43.893Z"
-  },
-  {
-    "id": "A0010",
-    "farmerId": "F044",
-    "region": "karega",
-    "amount": 7800,
-    "date": "2025-09-16",
-    "createdAt": "2025-09-16T19:59:15.526Z"
-  },
-  {
-    "id": "A0012",
-    "farmerId": "F012",
-    "region": "mukurweini",
-    "amount": 1000,
-    "date": "2025-09-20",
-    "createdAt": "2025-09-20T18:49:59.116Z"
-  },
-  {
-    "id": "A0013",
-    "farmerId": "F011",
-    "region": "mukurweini",
-    "amount": 3500,
-    "date": "2025-09-21",
-    "createdAt": "2025-09-21T12:08:04.649Z"
-  },
-  {
     "id": "A0014",
-    "farmerId": "F010",
-    "region": "karega",
-    "amount": 600,
-    "date": "2025-09-23",
-    "createdAt": "2025-09-23T19:42:07.162Z"
+    "farmerId": "F003",
+    "region": "nyeri",
+    "amount": 500,
+    "date": "2025-10-05",
+    "createdAt": "2025-10-05T14:25:52.742Z",
+    "businessId": "B009"
+  },
+  {
+    "id": "A0002",
+    "farmerId": "F006",
+    "region": "kagaa",
+    "amount": 3000,
+    "date": "2025-10-06",
+    "createdAt": "2025-10-06T10:32:05.131Z",
+    "businessId": "B007"
   }
 ]

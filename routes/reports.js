@@ -8,17 +8,23 @@ const { requireRoles } = require("../middleware/roles");
 // ✅ Daily Collections with optional ?date=YYYY-MM-DD
 router.get("/daily-collections", requireAuth, requireRoles(["admin", "staff"]), async (req, res) => {
   try {
+    const loggedInUser = req.user;
+    if (!loggedInUser || !loggedInUser.businessId) {
+      return res.status(403).json({ error: "Unauthorized: No business assigned" });
+    }
+
     const { date } = req.query;
-    const targetDate = date || new Date().toISOString().split("T")[0]; // default today
+    const targetDate = date || new Date().toISOString().split("T")[0];
 
     const milk = await read("milk");
     const farmers = await read("farmers");
     const users = await read("users");
 
-    // Filter by chosen date (normalize to YYYY-MM-DD)
-    const records = milk.filter(r => {
-      return new Date(r.date).toISOString().split("T")[0] === targetDate;
-    });
+    // ✅ Filter by businessId and date
+    const records = milk.filter(
+      r => r.businessId === loggedInUser.businessId &&
+           new Date(r.date).toISOString().split("T")[0] === targetDate
+    );
 
     let totalLitres = 0;
     let byStaff = {};
@@ -28,23 +34,16 @@ router.get("/daily-collections", requireAuth, requireRoles(["admin", "staff"]), 
       const litres = parseFloat(r.litres);
       totalLitres += litres;
 
-      // ✅ Staff totals (using username)
-      const staff = users.find(u => u.id === r.createdBy);
+      const staff = users.find(u => u.id === r.createdBy && u.businessId === loggedInUser.businessId);
       const staffName = staff ? staff.username : "Unknown Staff";
       byStaff[staffName] = (byStaff[staffName] || 0) + litres;
 
-      // ✅ Region totals
-      const farmer = farmers.find(f => f.id === r.farmerId);
+      const farmer = farmers.find(f => f.id === r.farmerId && f.businessId === loggedInUser.businessId);
       const region = farmer ? farmer.region : "Unassigned";
       byRegion[region] = (byRegion[region] || 0) + litres;
     }
 
-    res.json({
-      date: targetDate,
-      totalLitres,
-      byStaff,
-      byRegion
-    });
+    res.json({ date: targetDate, totalLitres, byStaff, byRegion });
   } catch (err) {
     console.error("Daily collections report error:", err);
     res.status(500).json({ error: "Failed to generate daily collections report" });
@@ -53,8 +52,12 @@ router.get("/daily-collections", requireAuth, requireRoles(["admin", "staff"]), 
 // --- Monthly collections ---
 router.get("/monthly-collections", requireAuth, requireRoles(["admin", "staff"]), async (req, res) => {
   try {
-    const { month } = req.query; 
-    // Expected format: "YYYY-MM" e.g. "2025-09"
+    const loggedInUser = req.user;
+    if (!loggedInUser || !loggedInUser.businessId) {
+      return res.status(403).json({ error: "Unauthorized: No business assigned" });
+    }
+
+    const { month } = req.query;
     if (!month) {
       return res.status(400).json({ error: "Month (YYYY-MM) is required" });
     }
@@ -63,28 +66,28 @@ router.get("/monthly-collections", requireAuth, requireRoles(["admin", "staff"])
     const farmers = await read("farmers");
     const users = await read("users");
 
-    // Filter by month
-    const records = milk.filter(r => r.date.startsWith(month));
+    // ✅ Filter by businessId and month
+    const records = milk.filter(
+      r => r.businessId === loggedInUser.businessId && r.date.startsWith(month)
+    );
 
     let byRegion = {};
     let byStaff = {};
     let totalLitres = 0;
 
     for (const r of records) {
-      totalLitres += parseFloat(r.litres);
+      const litres = parseFloat(r.litres);
+      totalLitres += litres;
 
-      // Group by Region
-      const farmer = farmers.find(f => f.id === r.farmerId);
+      const farmer = farmers.find(f => f.id === r.farmerId && f.businessId === loggedInUser.businessId);
       const region = farmer ? farmer.region : "Unassigned";
-      byRegion[region] = (byRegion[region] || 0) + parseFloat(r.litres);
+      byRegion[region] = (byRegion[region] || 0) + litres;
 
-      // Group by Staff
-      const staff = users.find(u => u.id === r.createdBy);
+      const staff = users.find(u => u.id === r.createdBy && u.businessId === loggedInUser.businessId);
       const staffName = staff ? staff.username : r.createdBy;
-      byStaff[staffName] = (byStaff[staffName] || 0) + parseFloat(r.litres);
+      byStaff[staffName] = (byStaff[staffName] || 0) + litres;
     }
 
-    // Sort results (descending order)
     const sortedRegions = Object.entries(byRegion)
       .sort((a, b) => b[1] - a[1])
       .map(([region, litres]) => ({ region, litres }));
@@ -93,12 +96,7 @@ router.get("/monthly-collections", requireAuth, requireRoles(["admin", "staff"])
       .sort((a, b) => b[1] - a[1])
       .map(([staff, litres]) => ({ staff, litres }));
 
-    res.json({
-      month,
-      totalLitres,
-      byRegion: sortedRegions,
-      byStaff: sortedStaff
-    });
+    res.json({ month, totalLitres, byRegion: sortedRegions, byStaff: sortedStaff });
   } catch (err) {
     console.error("Monthly collections report error:", err);
     res.status(500).json({ error: "Failed to generate monthly collections report" });
@@ -108,17 +106,29 @@ router.get("/monthly-collections", requireAuth, requireRoles(["admin", "staff"])
 router.get("/farmer-wise/:farmerId", requireAuth, requireRoles(["admin", "staff"]), async (req, res) => {
   try {
     const { farmerId } = req.params;
+    const loggedInUser = req.user;
+    if (!loggedInUser || !loggedInUser.businessId) {
+      return res.status(403).json({ error: "Unauthorized: No business assigned" });
+    }
+
     const milk = await read("milk");
     const farmers = await read("farmers");
     const advances = await read("advances");
 
-    const farmer = farmers.find(f => f.id.toLowerCase() === farmerId.toLowerCase());
+    // ✅ Find farmer within same business
+    const farmer = farmers.find(
+      f => f.id.toLowerCase() === farmerId.toLowerCase() &&
+           f.businessId === loggedInUser.businessId
+    );
     if (!farmer) {
-      return res.status(404).json({ error: "Farmer not found" });
+      return res.status(404).json({ error: "Farmer not found or unauthorized" });
     }
 
-    // Filter milk records for this farmer
-    const records = milk.filter(r => r.farmerId.toLowerCase() === farmerId.toLowerCase());
+    // ✅ Filter milk records for this farmer and business
+    const records = milk.filter(
+      r => r.farmerId.toLowerCase() === farmerId.toLowerCase() &&
+           r.businessId === loggedInUser.businessId
+    );
 
     // ✅ Group by date → session
     const byDate = {};
@@ -130,8 +140,10 @@ router.get("/farmer-wise/:farmerId", requireAuth, requireRoles(["admin", "staff"
     // ✅ Total litres
     const totalLitres = records.reduce((sum, r) => sum + parseFloat(r.litres), 0);
 
-    // ✅ Total advances
-    const farmerAdvances = advances[farmer.id] || [];
+    // ✅ Filter and sum advances for this farmer and business
+    const farmerAdvances = advances.filter(
+      a => a.farmerId === farmer.id && a.businessId === loggedInUser.businessId
+    );
     const totalAdvance = farmerAdvances.reduce((sum, a) => sum + parseFloat(a.amount), 0);
 
     res.json({
@@ -142,7 +154,7 @@ router.get("/farmer-wise/:farmerId", requireAuth, requireRoles(["admin", "staff"
       },
       totalLitres,
       totalAdvance,
-      byDate // 📅 detailed records per date and session
+      byDate
     });
   } catch (err) {
     console.error("Farmer-wise report error:", err);

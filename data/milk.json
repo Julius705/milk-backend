@@ -1,862 +1,112 @@
 [
   {
-    "id": "M0004",
-    "farmerId": "F047",
-    "litres": 67,
-    "session": "Morning",
-    "region": "kigumo",
-    "date": "2025-09-17",
-    "createdAt": "2025-09-17T19:05:56.145Z"
-  },
-  {
     "id": "M0002",
-    "farmerId": "F027",
-    "litres": 54,
+    "farmerId": "F004",
+    "litres": 45,
     "session": "Morning",
-    "region": "mukurweini",
-    "date": "2025-09-17",
-    "createdAt": "2025-09-17T19:37:24.700Z"
+    "region": "nyeri",
+    "date": "2025-10-05",
+    "createdBy": "Umgdon1dp557",
+    "createdAt": "2025-10-05T17:42:00.748Z",
+    "businessId": "B007"
   },
   {
     "id": "M0003",
-    "farmerId": "F015",
-    "litres": 45,
+    "farmerId": "F017",
+    "litres": 56,
     "session": "Morning",
     "region": "mukurweini",
-    "date": "2025-09-17",
-    "createdAt": "2025-09-17T19:38:39.663Z"
-  },
-  {
-    "id": "M0004",
-    "farmerId": "F007",
-    "litres": 76,
-    "session": "Evening",
-    "region": "mukurweini",
-    "date": "2025-09-17",
-    "createdAt": "2025-09-17T19:59:54.437Z"
+    "date": "2025-10-05",
+    "createdBy": "Umgdon1dp557",
+    "createdAt": "2025-10-05T18:34:11.321Z",
+    "businessId": "B007"
   },
   {
     "id": "M0005",
-    "farmerId": "F015",
-    "litres": 23,
-    "session": "Evening",
-    "region": "mukurweini",
-    "date": "2025-09-17",
-    "createdAt": "2025-09-17T20:00:20.421Z"
-  },
-  {
-    "id": "M0006",
-    "farmerId": "F043",
-    "litres": 65,
-    "session": "Morning",
-    "region": "kigumo",
-    "date": "2025-09-17",
-    "createdAt": "2025-09-17T20:00:56.364Z"
-  },
-  {
-    "id": "M0007",
-    "farmerId": "F026",
-    "litres": 54,
-    "session": "Evening",
-    "region": "kigumo",
-    "date": "2025-09-17",
-    "createdAt": "2025-09-17T20:01:18.468Z"
-  },
-  {
-    "id": "M0008",
-    "farmerId": "F041",
-    "litres": 45,
-    "session": "Morning",
-    "region": "kigumo",
-    "date": "2025-09-17",
-    "createdAt": "2025-09-17T20:02:26.250Z"
-  },
-  {
-    "id": "M0009",
-    "farmerId": "F033",
-    "litres": 667,
-    "session": "Morning",
-    "region": "mukurweini",
-    "date": "2025-09-17",
-    "createdAt": "2025-09-17T20:02:47.762Z"
-  },
-  {
-    "id": "M0010",
-    "farmerId": "F036",
-    "litres": 56,
-    "session": "Evening",
-    "region": "karega",
-    "date": "2025-09-17",
-    "createdAt": "2025-09-17T20:03:28.681Z"
-  },
-  {
-    "id": "M0011",
-    "farmerId": "F040",
-    "litres": 67,
-    "session": "Morning",
-    "region": "kigumo",
-    "date": "2025-09-17",
-    "createdAt": "2025-09-17T20:03:46.945Z"
-  },
-  {
-    "id": "M0012",
-    "farmerId": "F040",
-    "litres": 21,
-    "session": "Evening",
-    "region": "kigumo",
-    "date": "2025-09-17",
-    "createdAt": "2025-09-17T20:04:53.588Z"
-  },
-  {
-    "id": "M0013",
-    "farmerId": "F047",
-    "litres": 67.9,
-    "session": "Evening",
-    "region": "kigumo",
-    "date": "2025-09-17",
-    "createdAt": "2025-09-17T20:11:08.317Z"
-  },
-  {
-    "id": "M0014",
-    "farmerId": "F039",
-    "litres": 45,
-    "session": "Morning",
-    "region": "karega",
-    "date": "2025-09-17",
-    "createdAt": "2025-09-17T20:16:28.693Z"
-  },
-  {
-    "id": "M0015",
-    "farmerId": "F013",
-    "litres": 56,
-    "session": "Morning",
-    "region": "karega",
-    "date": "2025-09-17",
-    "createdAt": "2025-09-17T20:33:24.357Z"
-  },
-  {
-    "id": "M0016",
-    "farmerId": "F016",
-    "litres": 45.2,
-    "session": "Evening",
-    "region": "kigumo",
-    "date": "2025-09-17",
-    "createdAt": "2025-09-17T20:38:29.104Z"
-  },
-  {
-    "id": "M0017",
-    "farmerId": "F009",
-    "litres": 23,
-    "session": "Morning",
-    "region": "mukurweini",
-    "date": "2025-09-18",
-    "createdAt": "2025-09-18T03:56:47.340Z"
-  },
-  {
-    "id": "M0018",
-    "farmerId": "F013",
-    "litres": 34.5,
-    "session": "Morning",
-    "region": "karega",
-    "date": "2025-09-18",
-    "createdAt": "2025-09-18T03:57:18.393Z"
-  },
-  {
-    "id": "M0019",
-    "farmerId": "F037",
-    "litres": 12.7,
-    "session": "Morning",
-    "region": "kigumo",
-    "date": "2025-09-18",
-    "createdAt": "2025-09-18T04:05:23.602Z"
-  },
-  {
-    "id": "M0020",
-    "farmerId": "F017",
-    "litres": 14.5,
-    "session": "Evening",
-    "region": "mukurweini",
-    "date": "2025-09-18",
-    "createdAt": "2025-09-18T04:14:03.102Z"
-  },
-  {
-    "id": "M0021",
-    "farmerId": "F025",
-    "litres": 45,
-    "session": "Evening",
-    "region": "kigumo",
-    "date": "2025-09-18",
-    "createdAt": "2025-09-18T06:41:13.285Z"
-  },
-  {
-    "id": "M0022",
-    "farmerId": "F031",
-    "litres": 23.4,
-    "session": "Evening",
-    "region": "kigumo",
-    "date": "2025-09-18",
-    "createdAt": "2025-09-18T08:32:01.810Z"
-  },
-  {
-    "id": "Mmfppsaei205",
-    "farmerId": "F001",
-    "litres": 12,
-    "session": "Morning",
-    "region": "kigumo",
-    "date": "2025-09-16T00:00:00.000Z",
-    "createdAt": "2025-09-18T17:58:29.802Z"
-  },
-  {
-    "id": "Mmfppsaei632",
-    "farmerId": "F002",
-    "litres": 13,
-    "session": "Evenng",
-    "region": "kangari",
-    "date": "2025-09-16T00:00:00.000Z",
-    "createdAt": "2025-09-18T17:58:29.802Z"
-  },
-  {
-    "id": "Mmfppsaei115",
-    "farmerId": "F003",
-    "litres": 14,
-    "session": "Morning",
-    "region": "mukurweini",
-    "date": "2025-09-16T00:00:00.000Z",
-    "createdAt": "2025-09-18T17:58:29.802Z"
-  },
-  {
-    "id": "Mmfppsaei853",
-    "farmerId": "F004",
-    "litres": 15,
-    "session": "Evenng",
-    "region": "kagaa",
-    "date": "2025-09-16T00:00:00.000Z",
-    "createdAt": "2025-09-18T17:58:29.802Z"
-  },
-  {
-    "id": "Mmfppsaei888",
     "farmerId": "F005",
-    "litres": 16,
-    "session": "Morning",
-    "region": "karega",
-    "date": "2025-09-16T00:00:00.000Z",
-    "createdAt": "2025-09-18T17:58:29.802Z"
-  },
-  {
-    "id": "Mmfppsaei981",
-    "farmerId": "F006",
-    "litres": 17,
-    "session": "Evenng",
-    "region": "kahuhia",
-    "date": "2025-09-16T00:00:00.000Z",
-    "createdAt": "2025-09-18T17:58:29.802Z"
-  },
-  {
-    "id": "Mmfppsaei15",
-    "farmerId": "F007",
-    "litres": 18,
-    "session": "Morning",
-    "region": "mukurweini",
-    "date": "2025-09-16T00:00:00.000Z",
-    "createdAt": "2025-09-18T17:58:29.802Z"
-  },
-  {
-    "id": "Mmfppsaei179",
-    "farmerId": "F008",
-    "litres": 19,
-    "session": "Evenng",
-    "region": "karega",
-    "date": "2025-09-16T00:00:00.000Z",
-    "createdAt": "2025-09-18T17:58:29.802Z"
-  },
-  {
-    "id": "Mmfppsaei159",
-    "farmerId": "F009",
-    "litres": 20,
-    "session": "Morning",
-    "region": "mukurweini",
-    "date": "2025-09-16T00:00:00.000Z",
-    "createdAt": "2025-09-18T17:58:29.802Z"
-  },
-  {
-    "id": "Mmfppsaei919",
-    "farmerId": "F010",
-    "litres": 21,
-    "session": "Evenng",
-    "region": "karega",
-    "date": "2025-09-16T00:00:00.000Z",
-    "createdAt": "2025-09-18T17:58:29.802Z"
-  },
-  {
-    "id": "Mmfppsaei281",
-    "farmerId": "F011",
-    "litres": 22,
-    "session": "Morning",
-    "region": "mukurweini",
-    "date": "2025-09-16T00:00:00.000Z",
-    "createdAt": "2025-09-18T17:58:29.802Z"
-  },
-  {
-    "id": "Mmfppsaei10",
-    "farmerId": "F012",
-    "litres": 23,
-    "session": "Evenng",
-    "region": "mukurweini",
-    "date": "2025-09-16T00:00:00.000Z",
-    "createdAt": "2025-09-18T17:58:29.802Z"
-  },
-  {
-    "id": "Mmfppsaei731",
-    "farmerId": "F013",
-    "litres": 24,
-    "session": "Morning",
-    "region": "karega",
-    "date": "2025-09-16T00:00:00.000Z",
-    "createdAt": "2025-09-18T17:58:29.802Z"
-  },
-  {
-    "id": "Mmfppsaei12",
-    "farmerId": "F014",
-    "litres": 25,
-    "session": "Evenng",
-    "region": "kigumo",
-    "date": "2025-09-16T00:00:00.000Z",
-    "createdAt": "2025-09-18T17:58:29.802Z"
-  },
-  {
-    "id": "Mmfppsaei423",
-    "farmerId": "F015",
-    "litres": 26,
-    "session": "Morning",
-    "region": "mukurweini",
-    "date": "2025-09-16T00:00:00.000Z",
-    "createdAt": "2025-09-18T17:58:29.802Z"
-  },
-  {
-    "id": "Mmfppsaei159",
-    "farmerId": "F016",
-    "litres": 27,
-    "session": "Evenng",
-    "region": "kigumo",
-    "date": "2025-09-16T00:00:00.000Z",
-    "createdAt": "2025-09-18T17:58:29.802Z"
-  },
-  {
-    "id": "Mmfppsaej330",
-    "farmerId": "F017",
-    "litres": 28,
-    "session": "Morning",
-    "region": "mukurweini",
-    "date": "2025-09-15T00:00:00.000Z",
-    "createdAt": "2025-09-18T17:58:29.803Z"
-  },
-  {
-    "id": "Mmfppsaej906",
-    "farmerId": "F018",
-    "litres": 29,
-    "session": "Evenng",
-    "region": "kigumo",
-    "date": "2025-09-15T00:00:00.000Z",
-    "createdAt": "2025-09-18T17:58:29.803Z"
-  },
-  {
-    "id": "Mmfppsaej905",
-    "farmerId": "F019",
-    "litres": 30,
-    "session": "Morning",
-    "region": "mukurweini",
-    "date": "2025-09-15T00:00:00.000Z",
-    "createdAt": "2025-09-18T17:58:29.803Z"
-  },
-  {
-    "id": "Mmfppsaej186",
-    "farmerId": "F020",
-    "litres": 31,
-    "session": "Evenng",
-    "region": "karega",
-    "date": "2025-09-15T00:00:00.000Z",
-    "createdAt": "2025-09-18T17:58:29.803Z"
-  },
-  {
-    "id": "Mmfppsaej895",
-    "farmerId": "F021",
-    "litres": 32,
-    "session": "Morning",
-    "region": "kigumo",
-    "date": "2025-09-15T00:00:00.000Z",
-    "createdAt": "2025-09-18T17:58:29.803Z"
-  },
-  {
-    "id": "Mmfppsaej687",
-    "farmerId": "F022",
-    "litres": 33,
-    "session": "Evenng",
-    "region": "karega",
-    "date": "2025-09-15T00:00:00.000Z",
-    "createdAt": "2025-09-18T17:58:29.803Z"
-  },
-  {
-    "id": "Mmfppsaej281",
-    "farmerId": "F023",
-    "litres": 34,
-    "session": "Morning",
-    "region": "kigumo",
-    "date": "2025-09-15T00:00:00.000Z",
-    "createdAt": "2025-09-18T17:58:29.803Z"
-  },
-  {
-    "id": "Mmfppsaej976",
-    "farmerId": "F024",
-    "litres": 35,
-    "session": "Evenng",
-    "region": "mukurweini",
-    "date": "2025-09-15T00:00:00.000Z",
-    "createdAt": "2025-09-18T17:58:29.803Z"
-  },
-  {
-    "id": "Mmfppsaej865",
-    "farmerId": "F025",
-    "litres": 36,
-    "session": "Morning",
-    "region": "kigumo",
-    "date": "2025-09-15T00:00:00.000Z",
-    "createdAt": "2025-09-18T17:58:29.803Z"
-  },
-  {
-    "id": "Mmfppsaej352",
-    "farmerId": "F026",
-    "litres": 37,
-    "session": "Evenng",
-    "region": "kigumo",
-    "date": "2025-09-15T00:00:00.000Z",
-    "createdAt": "2025-09-18T17:58:29.803Z"
-  },
-  {
-    "id": "Mmfppsaej890",
-    "farmerId": "F027",
-    "litres": 38,
-    "session": "Morning",
-    "region": "mukurweini",
-    "date": "2025-09-15T00:00:00.000Z",
-    "createdAt": "2025-09-18T17:58:29.803Z"
-  },
-  {
-    "id": "Mmfppsaej3",
-    "farmerId": "F028",
-    "litres": 39,
-    "session": "Evenng",
-    "region": "kigumo",
-    "date": "2025-09-15T00:00:00.000Z",
-    "createdAt": "2025-09-18T17:58:29.803Z"
-  },
-  {
-    "id": "Mmfppsaej881",
-    "farmerId": "F029",
-    "litres": 40,
-    "session": "Morning",
-    "region": "kigumo",
-    "date": "2025-09-15T00:00:00.000Z",
-    "createdAt": "2025-09-18T17:58:29.803Z"
-  },
-  {
-    "id": "M0052",
-    "farmerId": "F023",
-    "litres": 34,
-    "session": "Morning",
-    "region": "kigumo",
-    "date": "2025-09-20",
-    "createdAt": "2025-09-20T10:37:32.610Z"
-  },
-  {
-    "id": "M0053",
-    "farmerId": "F023",
-    "litres": 23,
-    "session": "Evening",
-    "region": "kigumo",
-    "date": "2025-09-20",
-    "createdAt": "2025-09-20T10:40:46.502Z"
-  },
-  {
-    "id": "M0054",
-    "farmerId": "F023",
-    "litres": 34,
-    "session": "Morning",
-    "region": "kigumo",
-    "date": "2025-09-12",
-    "createdAt": "2025-09-20T13:06:16.620Z"
-  },
-  {
-    "id": "M0055",
-    "farmerId": "F023",
-    "litres": 12,
-    "session": "Evening",
-    "region": "kigumo",
-    "date": "2025-09-12",
-    "createdAt": "2025-09-20T13:06:32.562Z"
-  },
-  {
-    "id": "M0056",
-    "farmerId": "F023",
-    "litres": 34.5,
-    "session": "Morning",
-    "region": "kigumo",
-    "date": "2025-09-13",
-    "createdAt": "2025-09-20T13:06:46.990Z"
-  },
-  {
-    "id": "M0057",
-    "farmerId": "F023",
-    "litres": 11,
-    "session": "Evening",
-    "region": "kigumo",
-    "date": "2025-09-13",
-    "createdAt": "2025-09-20T13:07:52.219Z"
-  },
-  {
-    "id": "M0058",
-    "farmerId": "F023",
-    "litres": 43,
-    "session": "Morning",
-    "region": "kigumo",
-    "date": "2025-09-14",
-    "createdAt": "2025-09-20T13:08:12.565Z"
-  },
-  {
-    "id": "M0059",
-    "farmerId": "F023",
-    "litres": 13,
-    "session": "Evening",
-    "region": "kigumo",
-    "date": "2025-09-14",
-    "createdAt": "2025-09-20T13:08:28.559Z"
-  },
-  {
-    "id": "M0060",
-    "farmerId": "F023",
-    "litres": 12,
-    "session": "Evening",
-    "region": "kigumo",
-    "date": "2025-09-15",
-    "createdAt": "2025-09-20T13:08:56.386Z"
-  },
-  {
-    "id": "M0061",
-    "farmerId": "F023",
-    "litres": 34,
-    "session": "Morning",
-    "region": "kigumo",
-    "date": "2025-09-15",
-    "createdAt": "2025-09-20T13:09:16.029Z"
-  },
-  {
-    "id": "M0062",
-    "farmerId": "F023",
-    "litres": 35,
-    "session": "Morning",
-    "region": "kigumo",
-    "date": "2025-09-16",
-    "createdAt": "2025-09-20T13:09:29.846Z"
-  },
-  {
-    "id": "M0063",
-    "farmerId": "F023",
-    "litres": 9,
-    "session": "Evening",
-    "region": "kigumo",
-    "date": "2025-09-16",
-    "createdAt": "2025-09-20T13:10:06.529Z"
-  },
-  {
-    "id": "M0064",
-    "farmerId": "F017",
-    "litres": 45,
-    "session": "Morning",
-    "region": "mukurweini",
-    "date": "2025-09-21",
-    "createdAt": "2025-09-21T11:58:32.381Z"
-  },
-  {
-    "id": "M0065",
-    "farmerId": "F015",
-    "litres": 54,
-    "session": "Evening",
-    "region": "mukurweini",
-    "date": "2025-09-21",
-    "createdAt": "2025-09-21T11:59:05.617Z"
-  },
-  {
-    "id": "M0066",
-    "farmerId": "F037",
-    "litres": 56,
-    "session": "Evening",
-    "region": "kigumo",
-    "date": "2025-09-21",
-    "createdAt": "2025-09-21T14:06:25.779Z"
-  },
-  {
-    "id": "M0067",
-    "farmerId": "F012",
-    "litres": 45,
-    "session": "Evening",
-    "region": "mukurweini",
-    "date": "2025-09-21",
-    "createdAt": "2025-09-21T14:12:26.386Z"
-  },
-  {
-    "id": "M0068",
-    "farmerId": "F012",
-    "litres": 56,
-    "session": "Morning",
-    "region": "mukurweini",
-    "date": "2025-09-23",
-    "createdAt": "2025-09-23T19:43:42.357Z"
-  },
-  {
-    "id": "M0069",
-    "farmerId": "F014",
-    "litres": 45,
-    "session": "Morning",
-    "region": "kigumo",
-    "date": "2025-09-24",
-    "createdAt": "2025-09-24T09:21:41.235Z"
-  },
-  {
-    "id": "M0070",
-    "farmerId": "F019",
-    "litres": 67,
-    "session": "Morning",
-    "region": "mukurweini",
-    "date": "2025-09-24",
-    "createdAt": "2025-09-24T09:30:26.959Z"
-  },
-  {
-    "id": "M0071",
-    "farmerId": "F013",
-    "litres": 90,
-    "session": "Morning",
-    "region": "karega",
-    "date": "2025-09-24",
-    "createdAt": "2025-09-24T09:32:00.804Z"
-  },
-  {
-    "id": "M0072",
-    "farmerId": "F009",
-    "litres": 13.3,
-    "session": "Morning",
-    "region": "mukurweini",
-    "date": "2025-09-24",
-    "createdAt": "2025-09-24T09:40:32.754Z"
-  },
-  {
-    "id": "M0073",
-    "farmerId": "F001",
-    "litres": 77,
-    "session": "Morning",
-    "region": "kigumo",
-    "date": "2025-09-24",
-    "createdAt": "2025-09-24T09:45:06.267Z"
-  },
-  {
-    "id": "M0074",
-    "farmerId": "F002",
-    "litres": 89,
-    "session": "Morning",
-    "region": "kangari",
-    "date": "2025-09-24",
-    "createdAt": "2025-09-24T09:57:25.647Z"
-  },
-  {
-    "id": "M0075",
-    "farmerId": "F041",
-    "litres": 45,
-    "session": "Morning",
-    "region": "kigumo",
-    "date": "2025-09-24",
-    "createdAt": "2025-09-24T09:59:42.591Z"
-  },
-  {
-    "id": "M0076",
-    "farmerId": "F009",
-    "litres": 23.9,
-    "session": "Evening",
-    "region": "mukurweini",
-    "date": "2025-09-24",
-    "createdAt": "2025-09-24T10:12:52.820Z"
-  },
-  {
-    "id": "M0077",
-    "farmerId": "F014",
-    "litres": 89,
-    "session": "Evening",
-    "region": "kigumo",
-    "date": "2025-09-24",
-    "createdAt": "2025-09-24T10:28:46.962Z"
-  },
-  {
-    "id": "M0078",
-    "farmerId": "F007",
-    "litres": 76,
-    "session": "Morning",
-    "region": "mukurweini",
-    "date": "2025-09-24",
-    "createdAt": "2025-09-24T10:29:04.827Z"
-  },
-  {
-    "id": "M0079",
-    "farmerId": "F036",
-    "litres": 35,
-    "session": "Morning",
-    "region": "karega",
-    "date": "2025-09-24",
-    "createdAt": "2025-09-24T10:29:38.827Z"
-  },
-  {
-    "id": "M0080",
-    "farmerId": "F031",
-    "litres": 45,
-    "session": "Morning",
-    "region": "kigumo",
-    "date": "2025-09-24",
-    "createdAt": "2025-09-24T10:32:33.820Z"
-  },
-  {
-    "id": "M0081",
-    "farmerId": "F041",
-    "litres": 56,
-    "session": "Evening",
-    "region": "kigumo",
-    "date": "2025-09-24",
-    "createdBy": "Umfs4ukau459",
-    "createdAt": "2025-09-24T10:39:00.770Z"
-  },
-  {
-    "id": "M0082",
-    "farmerId": "F048",
-    "litres": 32,
-    "session": "Morning",
-    "region": "mukurweini",
-    "date": "2025-09-24",
-    "createdBy": "Umfmf3z4s793",
-    "createdAt": "2025-09-24T10:42:35.026Z"
-  },
-  {
-    "id": "M0083",
-    "farmerId": "F023",
-    "litres": 45.9,
-    "session": "Morning",
-    "region": "kigumo",
-    "date": "2025-09-25",
-    "createdBy": "Umfmetlw7",
-    "createdAt": "2025-09-25T13:29:22.510Z"
-  },
-  {
-    "id": "M0084",
-    "farmerId": "F014",
-    "litres": 73,
-    "session": "Morning",
-    "region": "kigumo",
-    "date": "2025-09-25",
-    "createdBy": "Umfmf3ajy825",
-    "createdAt": "2025-09-25T13:29:58.298Z"
-  },
-  {
-    "id": "M0085",
-    "farmerId": "F031",
-    "litres": 45,
-    "session": "Morning",
-    "region": "kigumo",
-    "date": "2025-09-25",
-    "createdBy": "Umfmf3ajy825",
-    "createdAt": "2025-09-25T13:30:38.662Z"
-  },
-  {
-    "id": "M0086",
-    "farmerId": "F008",
-    "litres": 65,
-    "session": "Morning",
-    "region": "karega",
-    "date": "2025-09-25",
-    "createdBy": "Umfmf2mbd25",
-    "createdAt": "2025-09-25T13:31:12.720Z"
-  },
-  {
-    "id": "M0087",
-    "farmerId": "F045",
-    "litres": 56,
-    "session": "Morning",
-    "region": "kigumo",
-    "date": "2025-09-25",
-    "createdBy": "Umfmf2mbd25",
-    "createdAt": "2025-09-25T13:31:36.095Z"
-  },
-  {
-    "id": "M0088",
-    "farmerId": "F003",
     "litres": 78,
     "session": "Morning",
     "region": "mukurweini",
-    "date": "2025-09-25",
-    "createdBy": "Umfs4ukau459",
-    "createdAt": "2025-09-25T13:32:06.730Z"
+    "date": "2025-10-05",
+    "createdBy": "U013",
+    "createdAt": "2025-10-05T18:53:12.399Z",
+    "businessId": "B007"
   },
   {
-    "id": "M0089",
-    "farmerId": "F008",
-    "litres": 23,
-    "session": "Evening",
-    "region": "karega",
-    "date": "2025-09-25",
-    "createdBy": "Umfmetlw7",
-    "createdAt": "2025-09-25T13:56:11.367Z"
-  },
-  {
-    "id": "M0090",
-    "farmerId": "F006",
-    "litres": 46,
-    "session": "Evening",
-    "region": "kahuhia",
-    "date": "2025-09-25",
-    "createdBy": "Umfmf3ajy825",
-    "createdAt": "2025-09-25T13:56:46.312Z"
-  },
-  {
-    "id": "M0091",
-    "farmerId": "F003",
-    "litres": 56,
-    "session": "Evening",
-    "region": "mukurweini",
-    "date": "2025-09-25",
-    "createdBy": "Umfmf3ajy825",
-    "createdAt": "2025-09-25T13:57:10.563Z"
-  },
-  {
-    "id": "M0092",
+    "id": "M0006",
     "farmerId": "F002",
-    "litres": 54,
+    "litres": 45,
     "session": "Morning",
-    "region": "kangari",
-    "date": "2025-09-25",
-    "createdBy": "Umfs4ukau459",
-    "createdAt": "2025-09-25T13:57:46.089Z"
+    "region": "isinya",
+    "date": "2025-10-05",
+    "createdBy": "U015",
+    "createdAt": "2025-10-05T18:55:21.383Z",
+    "businessId": "B008"
   },
   {
-    "id": "M0093",
-    "farmerId": "F023",
+    "id": "M0007",
+    "farmerId": "F001",
+    "litres": 78,
+    "session": "Morning",
+    "region": "ngumo",
+    "date": "2025-10-05",
+    "createdBy": "U015",
+    "createdAt": "2025-10-05T19:11:04.650Z",
+    "businessId": "B008"
+  },
+  {
+    "id": "M0008",
+    "farmerId": "F006",
+    "litres": 98,
+    "session": "Morning",
+    "region": "kagaa",
+    "date": "2025-10-05",
+    "createdBy": "Umgdon1dp557",
+    "createdAt": "2025-10-05T19:22:15.426Z",
+    "businessId": "B007"
+  },
+  {
+    "id": "M0010",
+    "farmerId": "F004",
+    "litres": 90,
+    "session": "Morning",
+    "region": "chuka",
+    "date": "2025-10-06",
+    "createdBy": "U011",
+    "createdAt": "2025-10-06T06:36:01.611Z",
+    "businessId": "B009"
+  },
+  {
+    "id": "M0008",
+    "farmerId": "F006",
     "litres": 34,
-    "session": "Morning",
-    "region": "kigumo",
-    "date": "2025-09-27",
-    "createdBy": "Umfmetlw7",
-    "createdAt": "2025-09-27T12:46:56.269Z"
+    "session": "Evening",
+    "region": "kagaa",
+    "date": "2025-10-06",
+    "createdBy": "U013",
+    "createdAt": "2025-10-06T07:32:21.309Z",
+    "businessId": "B007"
   },
   {
-    "id": "M0094",
-    "farmerId": "F011",
-    "litres": 78.5,
+    "id": "M0009",
+    "farmerId": "F006",
+    "litres": 12,
+    "session": "Evening",
+    "region": "kagaa",
+    "date": "2025-10-05",
+    "createdBy": "U013",
+    "createdAt": "2025-10-06T07:32:38.361Z",
+    "businessId": "B007"
+  },
+  {
+    "id": "M0010",
+    "farmerId": "F006",
+    "litres": 56,
     "session": "Morning",
-    "region": "mukurweini",
-    "date": "2025-09-27",
-    "createdBy": "Umfmf3ajy825",
-    "createdAt": "2025-09-27T15:41:09.139Z"
+    "region": "kagaa",
+    "date": "2025-10-06",
+    "createdBy": "U013",
+    "createdAt": "2025-10-06T07:33:04.176Z",
+    "businessId": "B007"
   }
 ]
